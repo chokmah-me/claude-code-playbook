@@ -1,0 +1,37 @@
+name: Create Release Archive
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+    
+    - name: Create release archive
+      run: |
+        mkdir -p release/playbook_${{ github.ref_name }}
+        cp -r .claude release/playbook_${{ github.ref_name }}/
+        cp CLAUDE.md LICENSE README.md .cursorrules release/playbook_${{ github.ref_name }}/
+        cd release
+        zip -r ClaudePlaybook_${{ github.ref_name }}.zip playbook_${{ github.ref_name }}/
+    
+    - name: Create Release
+      uses: softprops/action-gh-release@v1
+      with:
+        files: release/ClaudePlaybook_${{ github.ref_name }}.zip
+        body: |
+          ## Claude Code Playbook ${{ github.ref_name }}
+          
+          Download the archive and upload to your Claude Project.
+          
+          See [CHANGELOG.md](CHANGELOG.md) for details.
+        draft: false
+        prerelease: false
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

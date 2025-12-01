@@ -1,0 +1,52 @@
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Node (if examples added)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Python (if examples added)
+__pycache__/
+*.py[cod]
+*$py.class
+.Python
+*.so
+.env
+venv/
+
+# Build outputs
+dist/
+build/
+*.egg-info/
+
+# Testing
+.coverage
+*.cover
+.pytest_cache/
+
+# Logs
+*.log
+
+# Temporary files
+*.tmp
+*.bak
+*~
+
+# User-specific files
+REFACTOR_PROGRESS.md
+.local/
+
+# Archives (keep only in releases)
+*.zip
+*.tar.gz
