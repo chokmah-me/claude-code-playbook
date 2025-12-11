@@ -1,8 +1,11 @@
 # 🤖 Claude Code Playbook
 
 **Version**: 4.0.0
+
 **License**: MIT
+
 **DOI**: [10.5281/zenodo.17781760](https://doi.org/10.5281/zenodo.17781760)
+
 **Repository**: https://github.com/dyb5784/claude-code-playbook
 
 A token-efficient AI engineering system that reduces conversation turns by 67% through specialized workflows.
@@ -77,7 +80,9 @@ Vectorization, reproducibility, type hints, configuration, parallel processing, 
 ## 📖 Documentation
 
 - **[docs/GETTING_STARTED.md](docs/GETTING_STARTED.md)** - Step-by-step guide
+
 - **[docs/WORKFLOW_GUIDE.md](docs/WORKFLOW_GUIDE.md)** - Detailed workflow usage
+
 - **[skills/README.md](skills/README.md)** - Skill selection guide
 
 ---
@@ -85,21 +90,10 @@ Vectorization, reproducibility, type hints, configuration, parallel processing, 
 ## 🎓 Learning Path
 
 **Beginner:** Read docs → Run qnew → Use triage → Extract 1 function
+
 **Intermediate:** Use qplan → Extract 2-3 functions → Apply modernize
+
 **Advanced:** Use qcode (10-15 files) → Design custom strategies → Contribute back
-
----
-
-## 🤝 Contributing
-
-We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
-
-### Ways to Contribute
-- Add new skills for different domains
-- Improve existing workflows
-- Add examples and use cases
-- Report bugs and suggest features
-- Improve documentation
 
 ---
 
@@ -115,7 +109,14 @@ Originally developed for [ACP Simulation](https://github.com/dyb5784/acp-simulat
 
 ## 🤝 Contributing
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+
+### Ways to Contribute
+- Add new skills for different domains
+- Improve existing workflows
+- Add examples and use cases
+- Report bugs and suggest features
+- Improve documentation
 
 ---
 
