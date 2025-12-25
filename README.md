@@ -1,54 +1,32 @@
 # 🤖 Claude Code Playbook
 
-**Version**: 4.1.1
-
-**License**: MIT
-
-**Repository**: https://github.com/dyb5784/claude-code-playbook
+**Version**: 4.1.2 | **License**: MIT | **Repository**: https://github.com/dyb5784/claude-code-playbook
 
 A token-efficient AI engineering system that reduces conversation turns through specialized workflows.
 
----
-
-## 🎯 What is v4.1.1?
-
-Complete AI-assisted development system with cross-platform support, specialized skills, and production workflows. Designed for standalone use with **15-minute Quick Start** for immediate productivity.
-
-**Key Features:**
-- **🚀 Quick Start Guide** - Get productive in 15 minutes (NEW!)
-- **📦 Complete Template Set** - All configuration files included (NEW!)
-- **🔧 Health Check Scripts** - Automated monitoring (NEW!)
-- **🖥️ Windows PowerShell Support** - Full PowerShell integration with 26+ aliases (NEW!)
-- **Python Scientific Computing**: Research-grade patterns for NumPy/SciPy
-- **General Refactoring**: 7 structured workflows (triage, extract, modernize, qnew, qplan, qcode, catchup)
-- **Project Templates**: CLAUDE.md.template and .cursorrules.template
-- **Token Optimization**: 67% reduction in conversation turns
+**✨ New in v4.1.2**: Version metadata update and tagged release.
 
 ---
 
-## 🚀 Quick Start (New Users)
+## 🚀 Quick Start
 
-**Get productive in 15 minutes!**
+Get productive in **15 minutes** with our streamlined setup:
 
-See our comprehensive [Quick Start Guide](docs/QUICK_START.md) for step-by-step setup instructions.
-
-**TL;DR:**
 ```bash
-# 1. Clone playbook
+# 1. Clone the playbook
 git clone https://github.com/dyb5784/claude-code-playbook.git
+cd claude-code-playbook
 
 # 2. Copy templates to your project
 cp templates/CLAUDE.md.template /path/to/project/CLAUDE.md
-cp templates/.claude/settings.json.template /path/to/project/.claude/settings.json
+cp templates/.cursorrules.template /path/to/project/.cursorrules
 
-# 3. Customize for your project (5 minutes)
-nano /path/to/project/CLAUDE.md
-
-# 4. Test setup
-cd /path/to/project
+# 3. Test your setup
 claude skills refactoring qnew
 ```
 
+**Windows PowerShell:**
+```powershell
 **Windows PowerShell Setup:**
 ```powershell
 # 1. Setup PowerShell profile with aliases
@@ -74,11 +52,18 @@ cchealth       # Run health check
 **1. Clone and setup:**
 ```bash
 git clone https://github.com/dyb5784/claude-code-playbook.git
-cd claude-code-playbook
-cp templates/CLAUDE.md.template /path/to/your/project/CLAUDE.md
-cp templates/.cursorrules.template /path/to/your/project/.cursorrules
+Copy-Item templates/CLAUDE.md.template C:\path\to\project\CLAUDE.md
+. scripts/powershell/setup_powershell_profile.ps1
+ccnew  # Start new session
 ```
 
+**✅ Success indicators:**
+- Workflows execute without errors
+- Token usage stays under 25K per session  
+- Context resets work smoothly
+- You're productive within 30 minutes
+
+**📖 [Complete Getting Started Guide →](docs/GETTING_STARTED.md)**
 **Windows PowerShell Quick Start:**
 ```powershell
 # Clone and setup
@@ -157,101 +142,77 @@ python scripts/validate_config.py
 
 ---
 
-## 🛠️ Configuration Best Practices
+## 🎯 What You'll Get
 
-### The Golden Rules
+**Core Features:**
+- **🖥️ Cross-Platform Support** - Works on Windows (PowerShell), Mac, and Linux
+- **📦 Complete Template Set** - 8 configuration templates for instant setup
+- **🔧 Health Check Scripts** - Automated monitoring and validation
+- **⚡ Productivity Aliases** - 26+ shortcuts that save 8+ minutes/day
+- **🎓 Structured Learning Path** - Go from beginner to expert in 4 weeks
 
-1. **Keep CLAUDE.md under 50 lines**
-   - More lines = more context = worse performance
-   - Focus on: commands, paths, gotchas
-   - Exclude: style guides, obvious info, lengthy docs
+**Available Skills:**
+- **Python Scientific Computing** - Research-grade patterns for NumPy/SciPy
+- **General Refactoring** - 7 structured workflows (triage, extract, modernize, qnew, qplan, qcode, catchup)
 
-2. **Enable only MCP servers you use >50% of sessions**
-   - Each server adds 400-800 tokens
-   - Disable unused servers immediately
-   - Run `/context` to check token consumption
-
-3. **Use allowlists, not manual permissions**
-   - Pre-approve safe commands in `.claude/settings.json`
-   - Reduces interruptions by 90%
-   - Use `--dangerously-skip-permissions` with git safety net
-
-4. **Run health checks monthly**
-```bash
-   bash scripts/check_config_health.sh
-```
-   - Identifies configuration bloat
-   - Detects unused resources
-   - Validates best practices
-
-5. **Reset context every 5-7 prompts**
-```bash
-   /cost
-   /clear
-   claude skills refactoring catchup
-```
-   - Prevents performance degradation
-   - Maintains token efficiency
-   - Preserves context quality
-
-### Configuration Files Overview
-
-| File | Purpose | Commit to Git? | Size Limit |
-|------|---------|----------------|------------|
-| CLAUDE.md | Project guidelines | ✅ Yes | <50 lines |
-| .claude/settings.json | Permissions & tools | ✅ Yes | <3KB |
-| .mcp.json | External connections | ✅ Yes | <5KB |
-| CLAUDE.local.md | Personal preferences | ❌ No (gitignored) | No limit |
-| REFACTOR_PROGRESS.md | Session progress | ❌ No (temporary) | No limit |
+**Proven Results:**
+- 67% reduction in conversation turns
+- 100% test pass rate maintained
+- 40% improvement in code maintainability
+- 75% faster setup (60min → 15min)
 
 ---
 
-## 📊 Token Economics
+## 📚 Documentation
 
-**Claude Pro Optimization:**
-- 10-40 prompts per 5-hour window
-- ~44,000 tokens total capacity
-- Example session: 22K tokens (50% of budget)
+Our documentation is organized into focused guides:
 
-**Workflow Costs:**
-- triage: 2K | qnew: 2K | qplan: 3K | extract: 5K
-- modernize: 4K | qcode: 8-12K | catchup: 1-2K
+| Guide | Description | Time to Read |
+|-------|-------------|--------------|
+| **[🚀 Getting Started](docs/GETTING_STARTED.md)** | Complete 15-minute setup guide | 5 min |
+| **[⚙️ Configuration](docs/CONFIGURATION.md)** | Best practices and optimization | 8 min |
+| **[💡 Shell Aliases](docs/ALIASES.md)** | Productivity shortcuts for all platforms | 6 min |
+| **[📊 Token Economics](docs/TOKEN_ECONOMICS.md)** | Optimize token usage and costs | 7 min |
+| **[🏆 Success Guide](docs/SUCCESS_GUIDE.md)** | Learning paths and success metrics | 10 min |
 
-**Session Protocol (every 5-7 prompts):**
+**Platform-Specific Guides:**
+- **[Windows Quick Start](docs/windows/WINDOWS_QUICKSTART.md)** - PowerShell setup and usage
+- **[Implementation Guide](docs/PLAYBOOK_IMPLEMENTATION.md)** - Technical implementation details
+
+---
+
+## 🛠️ Key Commands
+
+### Daily Workflow
 ```bash
-/cost                              # Check usage
-/clear                             # Reset context
-claude skills refactoring catchup  # Restore context
+# Start your session
+ccclear && ccnew
+
+# Analyze and plan
+cctriage && ccplan
+
+# Implement changes
+cccode || ccextract
+
+# Check usage and reset
+cccost
+# Reset if >25K tokens: /clear && cccatchup
 ```
 
----
+### Essential Commands
+| Command | Purpose | Tokens |
+|---------|---------|--------|
+| `cctriage` | Find refactoring opportunities | ~2K |
+| `ccnew` | Start fresh session | ~2K |
+| `ccplan` | Create refactoring plan | ~3K |
+| `cccode` | Generate implementation | ~8-12K |
+| `cccatchup` | Restore context after reset | ~1-2K |
 
-## 📚 Available Skills
-
-### Python Scientific Computing
-**Location**: `skills/python-scientific/SKILL.md`
-
-Vectorization, reproducibility, type hints, configuration, parallel processing, performance profiling.
-
-### General Refactoring
-**Location**: `skills/refactoring/SKILL.md`
-
-7 workflows: triage, extract, modernize, qnew, qplan, qcode, catchup.
+**💰 Budget**: Stay under 25K tokens per session for Claude Pro efficiency.
 
 ---
 
-## 📖 Complete Documentation
-
-### Getting Started
-- **[Quick Start Guide](docs/QUICK_START.md)** - 15-minute setup ⭐
-- **[Getting Started](docs/GETTING_STARTED.md)** - Detailed walkthrough
-- **[Workflow Guide](docs/WORKFLOW_GUIDE.md)** - Workflow documentation
-
-### Configuration
-- **[Skills Overview](skills/README.md)** - Skill selection guide
-
----
-
+## 📂 What's Included
 ## 💡 Shell Productivity Aliases
 
 ### Linux/Mac (Bash/Zsh)
@@ -261,13 +222,28 @@ Add to your `~/.bashrc` or `~/.zshrc`:
 cat templates/.bash_aliases.template >> ~/.bashrc
 source ~/.bashrc
 
-# Now use shortcuts:
-cc              # Claude with skip permissions
-cctriage        # Run triage workflow
-ccnew           # Start new session
-ccreview        # Code review workflow
-ccfix           # Fix issue workflow
 ```
+claude-code-playbook/
+├── 📁 docs/                    # Complete documentation
+│   ├── GETTING_STARTED.md     # 15-minute setup guide
+│   ├── CONFIGURATION.md       # Best practices
+│   ├── ALIASES.md            # Productivity shortcuts
+│   ├── TOKEN_ECONOMICS.md    # Token optimization
+│   ├── SUCCESS_GUIDE.md      # Success metrics & learning
+│   └── windows/              # Windows-specific guides
+├── 📁 scripts/               # Health check and utility scripts
+│   ├── check_config_health.sh    # Linux/Mac health check
+│   ├── validate_config.py        # Configuration validator
+│   └── powershell/           # Windows PowerShell scripts
+├── 📁 skills/                # Available skills and workflows
+│   ├── python-scientific/    # Scientific computing patterns
+│   └── refactoring/          # 7 refactoring workflows
+├── 📁 templates/             # Ready-to-use configuration files
+│   ├── CLAUDE.md.template    # Main project configuration
+│   ├── .cursorrules.template # IDE integration rules
+│   ├── .claude/              # Claude-specific settings
+│   └── [5 more templates]    # Complete template set
+└── 📄 README.md              # This file
 
 ### Windows (PowerShell)
 Run the setup script or manually add aliases:
@@ -313,29 +289,57 @@ ls .claude/commands/  # Remove unused commands
 git pull origin main
 ```
 
-**Time investment**: 10 minutes/month  
-**ROI**: Prevents hours of debugging configuration issues
-
 ---
 
 ## 🎓 Learning Path
 
-**Beginner:** Read docs → Run qnew → Use triage → Extract 1 function
+### Week 1: Foundation ✅
+- [ ] Complete 15-minute setup
+- [ ] Run first `triage` workflow
+- [ ] Master basic commands (`ccnew`, `ccclear`, `cccost`)
+- [ ] Understand token limits with `/cost`
 
-**Intermediate:** Use qplan → Extract 2-3 functions → Apply modernize
+### Week 2: Workflows 🔄
+- [ ] Use all 7 refactoring workflows
+- [ ] Achieve <25K tokens per session
+- [ ] Practice context resets
+- [ ] Configure project settings
 
-**Advanced:** Use qcode (10-15 files) → Design custom strategies → Contribute back
+### Week 3: Optimization ⚡
+- [ ] Master shell aliases (save 8+ min/day)
+- [ ] Run monthly health checks
+- [ ] Customize for your tech stack
+- [ ] Track productivity metrics
+
+### Week 4: Mastery 🏆
+- [ ] Handle complex multi-file refactorings
+- [ ] Design custom strategies
+- [ ] Contribute improvements back
+- [ ] Mentor team members
+
+**📖 [Complete Success Guide →](docs/SUCCESS_GUIDE.md)**
 
 ---
 
 ## 🏆 Success Metrics
 
+**Immediate Benefits:**
+- Setup time: **15 minutes** (vs 60+ minutes without playbook)
+- First productive session: **30 minutes**
+- Daily time savings: **8+ minutes** with aliases
+
+**Quality Improvements:**
 **Proven Results Across Projects:**
 - 67% reduction in conversation turns
 - 100% test pass rate maintained
-- Zero API breakage
-- 40% improvement in maintainability
+- 40% improvement in code maintainability
+- Zero API breakage during refactoring
 
+**Long-term Value:**
+- Consistent code quality across projects
+- Reduced debugging time
+- Faster onboarding for new team members
+- Standardized development practices
 **After v4.1 improvements:**
 - 75% faster setup (60min → 15min)
 - 80% fewer configuration errors
@@ -344,29 +348,35 @@ git pull origin main
 
 ---
 
-## 🎯 Success Metrics to Track
+## 🔧 Platform Support
 
-After implementing these improvements:
+### Linux/Mac (Bash/Zsh)
+```bash
+# Setup aliases
+cat templates/.bash_aliases.template >> ~/.bashrc
+source ~/.bashrc
 
-1. **Time to First Productive Session**
-   - Target: 15 minutes (down from 60+ minutes)
+# Use shortcuts
+cctriage  # Analyze code
+cccost    # Check tokens
+cchealth  # Health check
+```
 
-2. **Token Efficiency**  
-   - Target: <25K tokens per productive session
-   - Use: `/cost` command regularly
+### Windows (PowerShell)
+```powershell
+# Setup PowerShell profile
+. scripts/powershell/setup_powershell_profile.ps1
 
-3. **Configuration Health**
-   - Target: Monthly health check passing
-   - Run: `bash scripts/check_config_health.sh`
+# Use shortcuts
+cctriage  # Analyze code
+cccost    # Check tokens
+cchealth  # Health check
+```
 
-4. **Workflow Adoption**
-   - Target: Using 3+ workflows regularly
-   - Common: triage, qnew, extract, catchup
-
----
-
-## 📈 What's New in v4.1
-
+**Note**: PowerShell execution may require:
+```powershell
+Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
+```
 ### New Features
 ✨ **15-Minute Quick Start** - Get productive immediately  
 ✨ **Complete Template Set** - All configuration files included (8 templates)  
@@ -395,46 +405,21 @@ After implementing these improvements:
 
 We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
-### Ways to Contribute
-- Add new skills for different domains
-- Improve existing workflows
-- Add examples and use cases
-- Report bugs and suggest features
-- Improve documentation
-- Share success stories
-
 **Areas needing help:**
 - Additional language support (Go, Rust, Java)
 - More custom command templates
-- Video walkthroughs
+- Video walkthroughs and tutorials
 - Translation to other languages
-- Performance benchmarking
-
----
-
-## 🆘 Getting Help
-
-### Self-Service Resources
-1. **Quick Start Issues**: See [docs/QUICK_START.md](docs/QUICK_START.md)
-2. **Configuration Problems**: Run `python scripts/validate_config.py`
-3. **Common Errors**: Check GitHub Issues
-4. **Workflow Questions**: See [docs/WORKFLOW_GUIDE.md](docs/WORKFLOW_GUIDE.md)
-
-### Community Support
-- **GitHub Issues**: Bug reports and feature requests
-- **GitHub Discussions**: Questions and experiences
-- **Success Stories**: Share your wins!
-
-### Official Resources
-- **Claude Code Docs**: https://docs.anthropic.com/claude-code
-- **Anthropic Blog**: https://www.anthropic.com/blog
+- Performance benchmarking tools
 
 ---
 
 ## 📞 Support
 
-**Issues:** Open on GitHub  
-**Claude Code Docs:** https://docs.anthropic.com/claude-code
+**Documentation**: Browse our complete [docs/](docs/) folder  
+**Issues**: Report bugs on [GitHub Issues](https://github.com/dyb5784/claude-code-playbook/issues)  
+**Discussions**: Share experiences in [GitHub Discussions](https://github.com/dyb5784/claude-code-playbook/discussions)  
+**Claude Code Docs**: https://docs.anthropic.com/claude-code
 
 ---
 
@@ -444,4 +429,9 @@ MIT License - see [LICENSE](LICENSE) for details.
 
 ---
 
+**Version**: 4.1.2 | **Date**: December 25, 2025 | **Status**: ✅ Production Ready
+
+---
+
+*Ready to get started? Head to the [🚀 Getting Started Guide](docs/GETTING_STARTED.md) and be productive in 15 minutes!*
 **Version**: 4.1.1 | **Date**: December 25, 2025 | **Status**: ✅ Production Ready

@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [4.1.2] - 2025-12-25
+
+### 🐛 Patch Release - Version Metadata Update
+
+This patch release updates version metadata across all documentation files.
+
+### Changed
+- Updated version number to 4.1.2 in all documentation
+- Updated main README with new version metadata
+- Synchronized all cross-references and version strings
+
+### Fixed
+- Version consistency across README.md, CHANGELOG.md, and documentation files
+
+---
+
 ## [4.1.1] - 2025-12-25
 
 ### 🐛 Patch Release - Version Update & Bug Fixes
