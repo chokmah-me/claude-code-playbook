@@ -1,197 +1,179 @@
-# Getting Started with Claude Code Playbook
+# 🚀 Getting Started with Claude Code Playbook
 
-This guide will help you quickly integrate the Claude Code Playbook into your project.
+**Version**: 4.1.1 | **License**: MIT | **Repository**: https://github.com/dyb5784/claude-code-playbook
 
-## Prerequisites
+Complete cross-platform setup guide for the Claude Code Playbook - get productive in 15 minutes!
 
-- [Claude Code](https://docs.claude.com/claude-code) installed and configured
-- A project with git initialized
-- Basic familiarity with Claude Code commands
+---
 
-## Quick Start (5 minutes)
+## 📋 Prerequisites
 
-### Step 1: Clone the Playbook
+Before starting, ensure you have:
+- **Claude Code** installed and configured
+- **Git** installed (for cloning the repository)
+- A **project directory** where you want to apply the playbook
 
+---
+
+## ⚡ 15-Minute Quick Start
+
+### Step 1: Clone the Playbook (2 minutes)
+
+**Linux/Mac:**
 ```bash
 git clone https://github.com/dyb5784/claude-code-playbook.git
 cd claude-code-playbook
 ```
 
-### Step 2: Copy Templates to Your Project
+**Windows PowerShell:**
+```powershell
+git clone https://github.com/dyb5784/claude-code-playbook.git
+Set-Location claude-code-playbook
+```
 
+### Step 2: Copy Templates to Your Project (3 minutes)
+
+**Linux/Mac:**
 ```bash
-# Copy templates to your project root
+# Copy core configuration files
 cp templates/CLAUDE.md.template /path/to/your/project/CLAUDE.md
 cp templates/.cursorrules.template /path/to/your/project/.cursorrules
+cp templates/.claude/settings.json.template /path/to/your/project/.claude/settings.json
+
+# Optional: Copy additional templates
+cp templates/.mcp.json.template /path/to/your/project/.mcp.json
+cp templates/.gitignore.claude /path/to/your/project/.gitignore
 ```
 
-### Step 3: Customize for Your Project
+**Windows PowerShell:**
+```powershell
+# Copy core configuration files
+Copy-Item templates/CLAUDE.md.template C:\path\to\your\project\CLAUDE.md
+Copy-Item templates/.cursorrules.template C:\path\to\your\project\.cursorrules
+Copy-Item templates/.claude/settings.json.template C:\path\to\your\project\.claude\settings.json
 
-Edit the copied files to match your project's needs:
-
-**CLAUDE.md:**
-- Update project name and description
-- Set your token budget constraints
-- Define validation requirements
-- Specify coding standards
-
-**.cursorrules:**
-- Adjust for your programming language
-- Update architectural preferences
-- Set documentation standards
-
-### Step 4: Start Using Claude Code
-
-In your project directory:
-
-```bash
-# Initialize a session
-/clear
-claude skills refactoring qnew
-
-# Analyze your codebase
-claude skills refactoring triage
+# Optional: Copy additional templates
+Copy-Item templates/.mcp.json.template C:\path\to\your\project\.mcp.json
+Copy-Item templates/.gitignore.claude C:\path\to\your\project\.gitignore
 ```
 
-## Choosing the Right Skill
+### Step 3: Customize for Your Project (5 minutes)
 
-### For Python Scientific Computing
+**Edit the main configuration file:**
 
-Use when working on:
-- Numerical simulations
-- Statistical analysis
-- Data processing
-- Research code
-- Performance optimization
-
-**How to load:**
+**Linux/Mac:**
 ```bash
-view skills/python-scientific/SKILL.md
+nano /path/to/your/project/CLAUDE.md
+# or use your preferred editor: vim, code, etc.
 ```
 
-### For General Refactoring
+**Windows:**
+```powershell
+# Using Notepad
+notepad C:\path\to\your\project\CLAUDE.md
 
-Use when:
-- Restructuring code
-- Adding new features
-- Reducing technical debt
-- Modernizing patterns
-
-**How to use:**
-```bash
-claude skills refactoring <workflow-name>
+# Using VS Code (if installed)
+code C:\path\to\your\project\CLAUDE.md
 ```
 
-## Session Management Best Practices
+**Key customization points in CLAUDE.md:**
+- Project name and description
+- Technology stack
+- Key commands and paths
+- Project-specific gotchas
+- Testing procedures
 
-### The 5-7 Prompt Rule
+### Step 4: Setup Shell Aliases (3 minutes)
 
-**Every 5-7 prompts, reset:**
+**Linux/Mac (Bash/Zsh):**
 ```bash
-/cost                              # Check usage
-/clear                             # Reset context
-claude skills refactoring catchup  # Restore context
+# Add aliases to your shell profile
+cat templates/.bash_aliases.template >> ~/.bashrc
+source ~/.bashrc
 ```
 
-**Why?** Prevents context degradation and optimizes token usage.
+**Windows PowerShell:**
+```powershell
+# Setup PowerShell profile with aliases
+. scripts/powershell/setup_powershell_profile.ps1
 
-### Budget Tracking
-
-Check cost every 3 prompts:
-```bash
-/cost
+# Or manually load aliases for current session
+. scripts/powershell/cc-aliases.ps1
 ```
 
-**Typical session:** 22K tokens (50% of Claude Pro budget)
+### Step 5: Test Your Setup (2 minutes)
 
-## Your First Refactoring Session
+**Navigate to your project and test:**
 
-### 1. Start Fresh
+**Linux/Mac:**
 ```bash
-/clear
+cd /path/to/your/project
 claude skills refactoring qnew
 ```
 
-### 2. Identify Targets
-```bash
-claude skills refactoring triage
+**Windows PowerShell:**
+```powershell
+Set-Location C:\path\to\your\project
+ccnew          # Start new session (using alias)
+# or
+claude skills refactoring qnew
 ```
-
-### 3. Plan Your Approach
-```bash
-claude skills refactoring qplan
-```
-
-### 4. Extract a Function
-```bash
-claude skills refactoring extract
-```
-
-### 5. Check Budget
-```bash
-/cost
-```
-
-### 6. Reset and Continue
-```bash
-/clear
-claude skills refactoring catchup
-```
-
-## Common Workflows
-
-### Find Technical Debt
-```bash
-claude skills refactoring triage
-```
-
-### Extract a Function
-```bash
-claude skills refactoring extract
-```
-
-### Modernize Code
-```bash
-claude skills refactoring modernize
-```
-
-### Batch Implementation
-```bash
-claude skills refactoring qcode
-```
-
-## Tips for Success
-
-1. **Start small**: Extract 1-2 functions per session
-2. **Validate constantly**: Run tests after each change
-3. **Track progress**: Document in REFACTOR_PROGRESS.md
-4. **Commit often**: Every 2-4 files
-5. **Follow patterns**: Use examples from SKILL.md files
-
-## Troubleshooting
-
-### "Workflow not found"
-- Check you're in the correct directory
-- Verify the playbook is cloned
-- Ensure skills directory structure is intact
-
-### High token usage
-- Use `/clear` + `catchup` more frequently
-- Reduce batch sizes
-- Focus on one pattern at a time
-
-### Poor quality suggestions
-- Verify CLAUDE.md is customized for your project
-- Ensure you're following the session reset protocol
-- Check that you're loading the appropriate skill
-
-## Next Steps
-
-- Read [WORKFLOW_GUIDE.md](WORKFLOW_GUIDE.md) for detailed workflow documentation
-- Explore [skills/README.md](../skills/README.md) for skill selection guidance
-- Check out the examples in `examples/` directory
-- Consider contributing your own skills!
 
 ---
 
-**Need help?** Open an issue on GitHub or check the [Claude Code Documentation](https://docs.claude.com/claude-code).
+## ✅ Success Indicators
+
+Your setup is successful if:
+- ✅ Workflows execute without errors
+- ✅ Token usage stays under 25K per session  
+- ✅ Context resets work smoothly (`/clear` + `catchup`)
+- ✅ Validation commands pass before commits
+- ✅ You're productive within 30 minutes
+
+---
+
+## 🚀 Next Steps
+
+Once your basic setup is working:
+
+1. **Explore Workflows**: Try `triage`, `extract`, and `modernize`
+2. **Read the Guides**: Check out [Configuration Guide](CONFIGURATION.md) and [Token Economics](TOKEN_ECONOMICS.md)
+3. **Customize Further**: Add project-specific commands and MCP servers
+4. **Join the Community**: Share your experience and get help
+
+---
+
+## 🆘 Troubleshooting
+
+### Common Issues
+
+**"Command not found" errors:**
+- Ensure Claude Code is installed: `claude --version`
+- Check that you're in the right directory
+- Verify your PATH includes Claude Code
+
+**Permission errors:**
+- Check your `.claude/settings.json` configuration
+- Ensure required permissions are granted
+- Use `--dangerously-skip-permissions` flag if needed
+
+**Template copy errors:**
+- Verify source and destination paths exist
+- Check file permissions
+- Use absolute paths if relative paths fail
+
+**PowerShell alias issues:**
+- Run `. scripts/powershell/cc-aliases.ps1` to load aliases manually
+- Check PowerShell execution policy: `Get-ExecutionPolicy`
+- Set execution policy if needed: `Set-ExecutionPolicy RemoteSigned -Scope CurrentUser`
+
+### Getting Help
+
+- **Quick Start Issues**: See [Windows Quick Start](windows/WINDOWS_QUICKSTART.md) for Windows-specific help
+- **Configuration Problems**: Run `python scripts/validate_config.py` or `powershell scripts/powershell/check_config_health.ps1`
+- **Common Errors**: Check [GitHub Issues](https://github.com/dyb5784/claude-code-playbook/issues)
+- **Workflow Questions**: See [Workflow Guide](WORKFLOW_GUIDE.md)
+
+---
+
+**Next Guide**: [Configuration Best Practices](CONFIGURATION.md) →
