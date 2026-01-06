@@ -1,6 +1,6 @@
 # 🤖 Claude Code Playbook
 
-**Version**: 4.1.3 | **License**: MIT | **Repository**: https://github.com/dyb5784/claude-code-playbook
+**Version**: 4.1.3 | **License**: MIT | **Repository**: https://github.com/chokmah-me/claude-code-playbook
 
 A token-efficient AI engineering system that reduces conversation turns through specialized workflows.
 
@@ -14,7 +14,7 @@ Get productive in **15 minutes**:
 
 ```bash
 # 1. Clone
-git clone https://github.com/dyb5784/claude-code-playbook.git
+git clone https://github.com/chokmah-me/claude-code-playbook.git
 cd claude-code-playbook
 
 # 2. Setup
@@ -142,8 +142,8 @@ We welcome contributions! See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 ## 📞 Support
 
 - **📖 Documentation**: [Complete docs](docs/)
-- **🐛 Issues**: [GitHub Issues](https://github.com/dyb5784/claude-code-playbook/issues)
-- **💬 Discussions**: [GitHub Discussions](https://github.com/dyb5784/claude-code-playbook/discussions)
+- **🐛 Issues**: [GitHub Issues](https://github.com/chokmah-me/claude-code-playbook/issues)
+- **💬 Discussions**: [GitHub Discussions](https://github.com/chokmah-me/claude-code-playbook/discussions)
 - **📚 Claude Code Docs**: https://docs.anthropic.com/claude-code
 
 ---

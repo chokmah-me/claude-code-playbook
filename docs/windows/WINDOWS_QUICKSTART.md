@@ -215,7 +215,7 @@ Based on playbook v4.1.0 metrics:
 
 ## Additional Resources
 
-- **Playbook Repository:** https://github.com/dyb5784/claude-code-playbook
+- **Playbook Repository:** https://github.com/chokmah-me/claude-code-playbook
 - **Full Implementation:** See `PLAYBOOK_IMPLEMENTATION.md`
 - **Project Context:** See `CLAUDE.md`
 - **Health Check:** Run `cchealth`

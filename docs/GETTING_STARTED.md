@@ -1,6 +1,6 @@
 # 🚀 Getting Started with Claude Code Playbook
 
-**Version**: 4.1.3 | **License**: MIT | **Repository**: https://github.com/dyb5784/claude-code-playbook
+**Version**: 4.1.3 | **License**: MIT | **Repository**: https://github.com/chokmah-me/claude-code-playbook
 
 Complete cross-platform setup guide for the Claude Code Playbook - get productive in 15 minutes!
 
@@ -21,13 +21,13 @@ Before starting, ensure you have:
 
 **Linux/Mac:**
 ```bash
-git clone https://github.com/dyb5784/claude-code-playbook.git
+git clone https://github.com/chokmah-me/claude-code-playbook.git
 cd claude-code-playbook
 ```
 
 **Windows PowerShell:**
 ```powershell
-git clone https://github.com/dyb5784/claude-code-playbook.git
+git clone https://github.com/chokmah-me/claude-code-playbook.git
 Set-Location claude-code-playbook
 ```
 
@@ -201,7 +201,7 @@ cccost
 
 - **Quick Start Issues**: See [Windows Quick Start](windows/WINDOWS_QUICKSTART.md) for Windows-specific help
 - **Configuration Problems**: Run `python scripts/validate_config.py` or `powershell scripts/powershell/check_config_health.ps1`
-- **Common Errors**: Check [GitHub Issues](https://github.com/dyb5784/claude-code-playbook/issues)
+- **Common Errors**: Check [GitHub Issues](https://github.com/chokmah-me/claude-code-playbook/issues)
 - **Workflow Questions**: See [Workflow Guide](WORKFLOW_GUIDE.md)
 
 ---

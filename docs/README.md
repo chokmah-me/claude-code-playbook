@@ -148,8 +148,8 @@ bash scripts/check_config_health.sh
 **Documentation Issues**: Check this index first  
 **Setup Problems**: Review [Getting Started](GETTING_STARTED.md)  
 **Platform-Specific**: See platform guides above  
-**General Questions**: [GitHub Discussions](https://github.com/dyb5784/claude-code-playbook/discussions)  
-**Bug Reports**: [GitHub Issues](https://github.com/dyb5784/claude-code-playbook/issues)  
+**General Questions**: [GitHub Discussions](https://github.com/chokmah-me/claude-code-playbook/discussions)  
+**Bug Reports**: [GitHub Issues](https://github.com/chokmah-me/claude-code-playbook/issues)  
 
 ---
 

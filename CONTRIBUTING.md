@@ -187,8 +187,8 @@ Before submitting:
 
 Need help contributing?
 
-- **Questions:** Use [GitHub Discussions](https://github.com/dyb5784/claude-code-playbook/discussions)
-- **Guidance:** Tag @dyb5784 in your issue
+- **Questions:** Use [GitHub Discussions](https://github.com/chokmah-me/claude-code-playbook/discussions)
+- **Guidance:** Tag @dyb in your issue
 - **Examples:** Look at merged PRs for reference
 
 ---
@@ -214,4 +214,4 @@ Every contribution, no matter how small, helps developers worldwide work more ef
 
 ---
 
-**Questions?** Open a [discussion](https://github.com/dyb5784/claude-code-playbook/discussions) or issue.
+**Questions?** Open a [discussion](https://github.com/chokmah-me/claude-code-playbook/discussions) or issue.
