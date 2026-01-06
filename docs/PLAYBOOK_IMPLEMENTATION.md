@@ -1,7 +1,7 @@
 # Claude Code Playbook Implementation Summary
 
 **Date:** December 25, 2025
-**Based on:** [claude-code-playbook v4.1.0](https://github.com/dyb5784/claude-code-playbook)
+**Based on:** [claude-code-playbook v4.1.0](https://github.com/chokmah-me/claude-code-playbook)
 
 ## What Was Implemented
 
@@ -188,7 +188,7 @@ Based on playbook v4.1.0 metrics:
 
 ## Resources
 
-- **Playbook repo:** https://github.com/dyb5784/claude-code-playbook
+- **Playbook repo:** https://github.com/chokmah-me/claude-code-playbook
 - **Current version:** 4.1.0 (Production Ready)
 - **Documentation:** See templates/ directory in repo
 

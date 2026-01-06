@@ -31,7 +31,7 @@ git --version
 ```bash
 # Clone to a temporary location
 cd ~/temp  # or any temporary directory
-git clone https://github.com/dyb5784/claude-code-playbook.git
+git clone https://github.com/chokmah-me/claude-code-playbook.git
 cd claude-code-playbook
 ```
 
@@ -365,7 +365,7 @@ claude skills refactoring catchup
 
 **Time Investment:** 15 minutes  
 **Expected ROI:** 2+ hours saved per week  
-**Support:** [Open an issue](https://github.com/dyb5784/claude-code-playbook/issues) if you get stuck
+**Support:** [Open an issue](https://github.com/chokmah-me/claude-code-playbook/issues) if you get stuck
 
 **Ready to start? Run the first workflow:**
 ```bash

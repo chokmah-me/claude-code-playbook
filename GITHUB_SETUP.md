@@ -58,7 +58,7 @@ GitHub will show you commands. Use these instead (from your local machine):
 cd /path/to/claude-code-playbook
 
 # Add GitHub as remote
-git remote add origin https://github.com/dyb5784/claude-code-playbook.git
+git remote add origin https://github.com/chokmah-me/claude-code-playbook.git
 
 # Push code and tags
 git push -u origin main
@@ -74,7 +74,7 @@ git push origin v3.0.0
 
 After pushing:
 
-1. Go to https://github.com/dyb5784/claude-code-playbook/releases
+1. Go to https://github.com/chokmah-me/claude-code-playbook/releases
 2. Click "Draft a new release"
 3. Choose tag: `v3.0.0`
 4. Release title: `v3.0.0 - Skills-Based Architecture`
@@ -135,7 +135,6 @@ After pushing to GitHub:
 
 1. **About section** (top right):
    - Description: `Token-efficient AI engineering workflows for Claude Code`
-   - Website: `https://doi.org/10.5281/zenodo.17744054`
    - Topics: `claude-ai`, `ai-development`, `refactoring`, `typescript`, `developer-tools`, `workflows`, `token-optimization`
 
 2. **Enable Discussions**:
@@ -164,7 +163,7 @@ Executable workflows for token-efficient AI development:
 
 Free & MIT licensed for all developers.
 
-https://github.com/dyb5784/claude-code-playbook
+https://github.com/chokmah-me/claude-code-playbook
 
 #ClaudeAI #AIdev #OpenSource
 ```
@@ -238,7 +237,7 @@ Everything is prepared and committed. Just push to GitHub and share with the wor
 ```bash
 # From your local machine after downloading from outputs:
 cd claude-code-playbook
-git remote add origin https://github.com/dyb5784/claude-code-playbook.git
+git remote add origin https://github.com/chokmah-me/claude-code-playbook.git
 git push -u origin main
 git push origin v3.0.0
 ```

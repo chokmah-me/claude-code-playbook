@@ -412,8 +412,8 @@ First public release with skills-based system.
 
 ## Support
 
-- **Issues**: [GitHub Issues](https://github.com/dyb5784/claude-code-playbook/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/dyb5784/claude-code-playbook/discussions)
+- **Issues**: [GitHub Issues](https://github.com/chokmah-me/claude-code-playbook/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/chokmah-me/claude-code-playbook/discussions)
 - **Documentation**: [Quick Start Guide](docs/QUICK_START.md)
 
 ---
