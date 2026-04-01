@@ -49,7 +49,7 @@ ccnew  # Start session
 - **⚡ 26+ Aliases** - Save 8+ minutes/day (`ccnew`, `cctriage`, `cchealth`)
 - **🧠 Agentic Patterns** - Plan Mode, Explore subagents, memory system, task tracking
 - **📊 Token Efficient** - Modern high-context workflows (no manual /clear needed)
-- **🎓 7 Workflows** - triage, extract, modernize, qnew, qplan, qcode, catchup
+- **🎓 6 Skills, 15 Workflows** - refactoring, debugging, documentation, onboarding, skill-extractor, python-scientific
 
 **Proven Results:**
 - 67% fewer conversation turns
@@ -95,7 +95,13 @@ cchealth    # Check config health
 ```
 ├── 📁 docs/                 # Complete documentation
 ├── 📁 scripts/              # Health checks & utilities
-├── 📁 skills/               # Available skills & workflows  
+├── 📁 skills/               # Available skills & workflows
+│   ├── refactoring/         #   triage, extract, modernize, qnew, qplan, qcode, catchup
+│   ├── debugging/           #   diagnose, trace
+│   ├── documentation/       #   audit, generate
+│   ├── onboarding/          #   orient, glossary
+│   ├── skill-extractor/     #   extract, refine
+│   └── python-scientific/   #   NumPy/SciPy patterns
 ├── 📁 templates/            # Ready-to-use configurations
 └── 📄 README.md             # This file
 ```
