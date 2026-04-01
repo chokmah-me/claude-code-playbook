@@ -4,41 +4,38 @@
 
 ---
 
-## 💰 Claude Pro Optimization
+## 💰 Token Efficiency Strategy
 
-### Understanding Your Limits
-- **Prompts**: 10-40 prompts per 5-hour window
-- **Tokens**: ~44,000 tokens total capacity
-- **Example Session**: 22K tokens (50% of budget)
+### Modern Claude Models (2026+)
+- **Capacity**: Extended context windows; no fixed 44K token ceiling
+- **Cost model**: Usage-based pricing (exact limits depend on plan)
+- **Best practice**: Monitor actual usage via Claude Code UI rather than preset budgets
 
-**Token Budget Allocation:**
-```
-Total Capacity: 44,000 tokens
-├── System Context: ~8,000 tokens (18%)
-├── User Input: ~6,000 tokens (14%)
-├── Assistant Response: ~12,000 tokens (27%)
-└── Reserve: ~18,000 tokens (41%)
-```
+### Practical Efficiency Targets
+- **Healthy per-session usage**: 10-30K tokens (varies by task complexity)
+- **Per-prompt guideline**: 1-3K tokens typical
+- **Session planning**: Batch work logically; longer sessions are OK if on-track
 
-### Token Efficiency Targets
-- **Target per session**: <25,000 tokens
-- **Target per prompt**: <2,000 tokens
-- **Context reset trigger**: >30,000 tokens
+**Token Efficiency Strategy:**
+- Use Explore subagents for codebase analysis (more efficient than manual grepping)
+- Use Plan Mode before major implementations
+- Maintain `REFACTOR_PROGRESS.md` for multi-session context persistence
+- Commit atomically to avoid re-explaining context
 
 ---
 
-## ⚡ Workflow Costs
+## ⚡ Workflow Costs (Relative Guide)
 
 ### Refactoring Workflows
-| Workflow | Token Cost | Use Case | Frequency |
-|----------|------------|----------|-----------|
-| `triage` | 2,000 tokens | Initial codebase analysis | Once per session |
-| `qnew` | 2,000 tokens | Start new refactoring | Once per session |
-| `qplan` | 3,000 tokens | Create refactoring plan | 2-3 times per session |
-| `extract` | 5,000 tokens | Extract functions/methods | 3-5 times per session |
-| `modernize` | 4,000 tokens | Update code patterns | 2-3 times per session |
-| `qcode` | 8-12,000 tokens | Generate refactored code | 1-2 times per session |
-| `catchup` | 1-2,000 tokens | Restore context | Every 5-7 prompts |
+| Workflow | Relative Cost | Use Case | When |
+|----------|---------------|----------|------|
+| `triage` | Low (~2K) | Initial codebase analysis | Start of project |
+| `qnew` | Low (~2K) | Start new session | Session start |
+| `qplan` | Medium (~3K) | Plan refactoring approach | Before major changes |
+| `extract` | Medium (~5K) | Extract functions/modules | Targeted decomposition |
+| `modernize` | Medium (~4K) | Update code patterns | Post-extraction |
+| `qcode` | High (~8-12K) | Full implementation | Execute approved plan |
+| `catchup` | Low (~1-2K) | Resume from progress file | Between sessions |
 
 ### Python Scientific Computing
 | Workflow | Token Cost | Use Case |
@@ -52,27 +49,27 @@ Total Capacity: 44,000 tokens
 
 ## 🔄 Session Protocol
 
-### Every 5-7 Prompts (Recommended)
-```bash
-/cost                              # Check current usage
-/clear                             # Reset conversation context
-claude skills refactoring catchup  # Restore essential context
-```
+### Multi-Session Continuity
+Before stopping work:
+1. Update `REFACTOR_PROGRESS.md` with completed tasks and next steps
+2. Commit your work atomically with clear messages
+3. On resumption: read `REFACTOR_PROGRESS.md`, then run `claude skills refactoring catchup`
 
-**Why this protocol works:**
-- Prevents context degradation
-- Maintains token efficiency
-- Preserves important project context
-- Resets accumulated noise
+**Why this works:**
+- Persistent context across session breaks
+- No manual context reset needed
+- Clear handoff for resumption
 
-### Session Budget Planning
+### Example Session Flow
 ```
-Session Budget: 25,000 tokens
-├── Setup (triage + qnew): 4,000 tokens (16%)
-├── Planning (qplan × 2): 6,000 tokens (24%)
-├── Implementation (qcode × 1): 10,000 tokens (40%)
-├── Refinement (extract × 2): 4,000 tokens (16%)
-└── Buffer: 1,000 tokens (4%)
+Session Goal: Extract 3 utility functions
+
+1. triage         (~2K tokens)  - identify candidates
+2. qplan          (~3K tokens)  - design extraction strategy
+3. extract × 3    (~15K tokens) - implement extractions
+4. commit + notes (~1K tokens)  - save progress
+
+Total: ~21K tokens
 ```
 
 ---

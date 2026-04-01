@@ -4,18 +4,22 @@
 
 ---
 
-## ⚠️ BUDGET CONSTRAINTS
+## ⚠️ SESSION & TOKEN MANAGEMENT
 
-**Claude Pro Subscription Limits:**
-- 10-40 prompts per 5-hour window
-- ~44,000 tokens total per window
-- Always use Sonnet 4.5 (NOT Opus)
+**Model & Environment:**
+- Use the default Claude model set in Claude Code (typically the latest available)
+- Work is designed for high-context Claude models (4.x series and above)
 
-**Session Management:**
-- Run `/cost` every 3 prompts to track token usage
-- Run `/clear` + `catchup` every 5-7 prompts
-- Batch work into 10-15 file increments maximum
-- Stop if token usage exceeds 30K in a session
+**Token Efficiency:**
+- Monitor token usage via Claude Code UI (auto-visible in current version)
+- For multi-session refactorings, maintain `REFACTOR_PROGRESS.md` for persistent state
+- Use Plan Mode (`/plan` skill) for planning phase before implementation
+- Use memory files and task lists for session continuity (no manual `/clear` workaround needed)
+
+**Practical Guidelines:**
+- Batch modifications into 10-15 file increments per session
+- Use Explore subagents for codebase analysis (faster than manual grep)
+- Commit atomically after meaningful milestones (every 2-4 files)
 
 ---
 
@@ -49,39 +53,16 @@
 
 Use the refactoring skills system for all work:
 
-**Start Every Session:**
-```bash
-/clear
-claude skills refactoring qnew
-```
+**Typical Workflow:**
+1. **Assess** — `claude skills refactoring triage` to find refactoring opportunities
+2. **Plan** — Use Plan Mode or `claude skills refactoring qplan` to design the approach
+3. **Implement** — `claude skills refactoring qcode` for batch implementation, or `extract`/`modernize` for focused changes
+4. **Resume** — `claude skills refactoring catchup` when resuming after a break (reads REFACTOR_PROGRESS.md)
 
-**Find What to Refactor:**
-```bash
-claude skills refactoring triage
-```
-
-**Plan Before Implementing:**
-```bash
-claude skills refactoring qplan
-```
-
-**Execute Refactoring:**
-```bash
-# For single function extraction
-claude skills refactoring extract
-
-# For pattern modernization
-claude skills refactoring modernize
-
-# For batch operations (after plan approval)
-claude skills refactoring qcode
-```
-
-**Resume After Context Reset:**
-```bash
-/clear
-claude skills refactoring catchup
-```
+**For New Sessions:**
+- Read `REFACTOR_PROGRESS.md` if it exists (shows prior work context)
+- Run `claude skills refactoring triage` to assess current state
+- Use Plan Mode for planning phase
 
 **See:** [.claude/skills/refactoring/SKILL.md](.claude/skills/refactoring/SKILL.md) for complete workflow documentation.
 
@@ -223,24 +204,21 @@ None currently
 
 ---
 
-## SESSION RESET PROTOCOL
+## SESSION CONTINUITY PROTOCOL
 
-**Every 5-7 prompts, execute this protocol:**
+**Between sessions (after stopping work):**
+1. Update `REFACTOR_PROGRESS.md` with:
+   - Completed tasks and files modified
+   - Current goal and blockers
+   - Next steps
+2. Commit your work with descriptive commit messages
+3. On next session, read `REFACTOR_PROGRESS.md` before resuming
+4. Run `claude skills refactoring catchup` to restore context from progress file
 
-1. Check token usage:
-   ```bash
-   /cost
-   ```
-
-2. If > 5 prompts or > 12K tokens:
-   ```bash
-   /clear
-   claude skills refactoring catchup
-   ```
-
-3. Continue work with restored context
-
-**Why:** Prevents context degradation, saves tokens, maintains quality.
+**In-session token management:**
+- Claude Code UI displays token usage continuously
+- No need for manual `/cost` checks or `/clear` resets
+- Memory system and task lists provide persistent context across turns
 
 ---
 
@@ -310,6 +288,6 @@ None currently
 
 ---
 
-**Last Updated:** 2025-12-01
-**Version:** 3.0.0
+**Last Updated:** 2026-04-01
+**Version:** 4.2.0
 **License:** MIT
