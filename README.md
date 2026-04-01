@@ -46,7 +46,7 @@ ccnew  # Start session
 
 **Core Features:**
 - **🖥️ Cross-Platform** - Windows (PowerShell), Mac, Linux
-- **⚡ 26+ Aliases** - Save 8+ minutes/day (`ccnew`, `cctriage`, `cchealth`)
+- **⚡ 20+ Aliases** - Save 8+ minutes/day (`ccnew`, `cctriage`, `cchealth`)
 - **🧠 Agentic Patterns** - Plan Mode, Explore subagents, memory system, task tracking
 - **📊 Token Efficient** - Modern high-context workflows (no manual /clear needed)
 - **🎓 6 Skills, 15 Workflows** - refactoring, debugging, documentation, onboarding, skill-extractor, python-scientific
@@ -121,7 +121,7 @@ source ~/.bashrc
 # Use shortcuts  
 cctriage  # Analyze code
 cccost    # Check tokens
-c chealth  # Health check
+cchealth  # Health check
 ```
 
 ### Windows (PowerShell)
@@ -132,7 +132,7 @@ c chealth  # Health check
 # Use shortcuts
 cctriage  # Analyze code
 cccost    # Check tokens
-c chealth  # Health check
+cchealth  # Health check
 ```
 
 **Note**: May require: `Set-ExecutionPolicy RemoteSigned -Scope CurrentUser`
