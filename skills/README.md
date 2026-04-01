@@ -32,11 +32,17 @@ This directory contains skills for AI-assisted development with Claude Code.
 │   └── workflows/
 │       ├── audit.md          # Scan for code/docs drift
 │       └── generate.md       # Generate docs from code
-└── onboarding/               # Codebase orientation for newcomers
+├── onboarding/               # Codebase orientation for newcomers
+│   ├── SKILL.md
+│   └── workflows/
+│       ├── orient.md         # Guided architecture walkthrough
+│       └── glossary.md       # Extract domain vocabulary
+└── skill-extractor/          # Extract reusable skills from sessions
     ├── SKILL.md
+    ├── template.md           # Skill file template
     └── workflows/
-        ├── orient.md         # Guided architecture walkthrough
-        └── glossary.md       # Extract domain vocabulary
+        ├── extract.md        # Detect patterns and create new skills
+        └── refine.md         # Improve existing skills from feedback
 ```
 
 ## Available Skills
@@ -146,6 +152,21 @@ claude skills refactoring qnew
 - Onboarding new team members
 - Cross-team work requiring shared vocabulary
 
+### 6. Skill Extractor
+
+**Location**: `.claude/skills/skill-extractor/SKILL.md`
+
+**Purpose**: Extract reusable skills from repeated session patterns
+
+**Available Workflows**:
+- **extract**: Detect repeated patterns in conversation and generate new skill files
+- **refine**: Improve existing skills based on usage feedback
+
+**When to Use**:
+- After repeating a multi-step workflow 2+ times
+- When an existing skill needs improvement
+- Building a skill library from real usage patterns
+
 ## Skill Selection Guide
 
 | Task Type | Primary Skill | Notes |
@@ -163,6 +184,8 @@ claude skills refactoring qnew
 | Generate module docs | Documentation | Use generate workflow |
 | New to a codebase | Onboarding | orient + glossary |
 | Understand domain terms | Onboarding | Use glossary workflow |
+| Formalize repeated workflow | Skill Extractor | Use extract workflow |
+| Improve a skill | Skill Extractor | Use refine workflow |
 
 ## Usage Patterns
 
