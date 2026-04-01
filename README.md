@@ -4,7 +4,7 @@
 
 A token-efficient AI engineering system that reduces conversation turns through specialized workflows and agentic patterns.
 
-**✨ New in v4.2.0**: Updated to April 2026 best practices with Plan Mode integration, Explore subagents, persistent memory, and modern token efficiency (no more manual /clear resets).
+Includes Plan Mode integration, Explore subagents, persistent memory, and 6 skill domains with 15 reusable workflows.
 
 ---
 
@@ -17,12 +17,12 @@ Get productive in **15 minutes**:
 git clone https://github.com/chokmah-me/claude-code-playbook.git
 cd claude-code-playbook
 
-# 2. Setup
-cp templates/CLAUDE.md.template /path/to/project/CLAUDE.md
-cp templates/.cursorrules.template /path/to/project/.cursorrules
+# 2. Copy templates to your project
+cp templates/CLAUDE.md.template /path/to/your/project/CLAUDE.md
+cp templates/.bash_aliases.template >> ~/.bashrc && source ~/.bashrc
 
-# 3. Test
-claude skills refactoring qnew
+# 3. Start working
+cctriage  # Find refactoring opportunities
 ```
 
 **Windows PowerShell:**
@@ -51,11 +51,10 @@ ccnew  # Start session
 - **📊 Token Efficient** - Modern high-context workflows (no manual /clear needed)
 - **🎓 6 Skills, 15 Workflows** - refactoring, debugging, documentation, onboarding, skill-extractor, python-scientific
 
-**Proven Results:**
-- 67% fewer conversation turns
-- 100% test pass rate maintained  
-- 40% better maintainability
-- 75% faster setup (15 min vs 60+ min)
+**In our testing:**
+- Fewer conversation turns through structured workflows
+- Test pass rates maintained across refactoring sessions
+- 15-minute setup vs. 60+ minutes configuring from scratch
 
 ---
 
@@ -80,7 +79,7 @@ cchealth    # Check config health
 | **[🚀 Getting Started](docs/GETTING_STARTED.md)** | Complete setup & first workflow | 5 min |
 | **[🧠 Agentic Patterns](docs/AGENTIC_PATTERNS.md)** | Plan Mode, Explore agents, memory, tasks | 10 min |
 | **[⚙️ Configuration](docs/CONFIGURATION.md)** | Best practices & optimization | 8 min |
-| **[💡 Shell Aliases](docs/ALIASES.md)** | All 26+ shortcuts (Bash & PowerShell) | 6 min |
+| **[💡 Shell Aliases](docs/ALIASES.md)** | All 20+ shortcuts (Bash & PowerShell) | 6 min |
 | **[📊 Token Economics](docs/TOKEN_ECONOMICS.md)** | Budget planning & efficiency | 7 min |
 | **[🏆 Success Guide](docs/SUCCESS_GUIDE.md)** | Learning path & metrics | 10 min |
 
@@ -90,12 +89,17 @@ cchealth    # Check config health
 
 ---
 
+## 📂 How Skills Work
+
+Skills are markdown-based workflow definitions that Claude Code reads from `.claude/skills/`. Each skill has a `SKILL.md` router and a `workflows/` directory with step-by-step procedures. You invoke them by asking Claude to run a workflow (e.g., "run the diagnose workflow") or via shell aliases.
+
 ## 📂 Project Structure
 
 ```
+├── 📁 .claude/skills/       # Skills loaded by Claude Code (canonical)
 ├── 📁 docs/                 # Complete documentation
 ├── 📁 scripts/              # Health checks & utilities
-├── 📁 skills/               # Available skills & workflows
+├── 📁 skills/               # Skills mirror (for browsing/reference)
 │   ├── refactoring/         #   triage, extract, modernize, qnew, qplan, qcode, catchup
 │   ├── debugging/           #   diagnose, trace
 │   ├── documentation/       #   audit, generate
@@ -106,7 +110,7 @@ cchealth    # Check config health
 └── 📄 README.md             # This file
 ```
 
-**Templates include:** CLAUDE.md, .cursorrules, settings, MCP configs, aliases, and more.
+**Templates include:** CLAUDE.md, .cursorrules, settings, aliases, and more.
 
 ---
 
@@ -118,9 +122,9 @@ cchealth    # Check config health
 cat templates/.bash_aliases.template >> ~/.bashrc
 source ~/.bashrc
 
-# Use shortcuts  
+# Use shortcuts
 cctriage  # Analyze code
-cccost    # Check tokens
+ccplan    # Create plan
 cchealth  # Health check
 ```
 
@@ -131,7 +135,7 @@ cchealth  # Health check
 
 # Use shortcuts
 cctriage  # Analyze code
-cccost    # Check tokens
+ccplan    # Create plan
 cchealth  # Health check
 ```
 
@@ -153,10 +157,6 @@ We welcome contributions! See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 - **🐛 Issues**: [GitHub Issues](https://github.com/chokmah-me/claude-code-playbook/issues)
 - **💬 Discussions**: [GitHub Discussions](https://github.com/chokmah-me/claude-code-playbook/discussions)
 - **📚 Claude Code Docs**: https://docs.anthropic.com/claude-code
-
----
-
-**Version**: 4.2.0 | **Date**: April 1, 2026 | **Status**: ✅ Production Ready
 
 ---
 
