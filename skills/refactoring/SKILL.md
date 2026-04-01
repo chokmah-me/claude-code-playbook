@@ -202,51 +202,39 @@ If ANY fail: STOP and fix before proceeding.
 
 ---
 
-## 📊 Budget Management
+## 📊 Token Efficiency
 
-### Token Budget Guidelines
+### Workflow Relative Costs
 
-**Claude Pro Subscription:**
-- 10-40 prompts per 5-hour window
-- ~1,100 tokens average per prompt
-- Total: ~44,000 tokens per window
+Use these as relative guides (actual usage depends on codebase size):
 
-**Workflow Costs:**
-- triage: 2K tokens (run once)
-- qnew: 2K tokens (per session)
-- qplan: 3K tokens (per plan)
-- extract: 5K tokens (per function)
-- modernize: 4K tokens (per file)
-- qcode: 8-12K tokens (per batch)
-- catchup: 1-2K tokens (per reset)
+| Workflow | Relative | Best For |
+|----------|----------|----------|
+| triage | Low | Initial analysis (run once) |
+| qnew | Low | Session start |
+| qplan | Medium | Design phase |
+| extract | Medium | Single function |
+| modernize | Medium | Pattern updates |
+| qcode | High | Batch implementation |
+| catchup | Low | Resume from progress |
 
-**Example Budget Allocation:**
-```
-Session 1 (within 5-hour window):
-- qnew: 2K
-- triage: 2K
-- qplan: 3K
-- extract #1: 5K
-- /clear + catchup: 1K
-- extract #2: 5K
-- /cost check
-- modernize: 4K
-Total: ~22K tokens (50% of budget)
-```
+**Example multi-session plan:**
+- Session 1: triage (2K) + qnew (2K) + qplan (3K) = 7K
+- Session 2: qcode (10K) + commit + update progress
+- Session 3: catchup (2K) + qcode (8K) = 10K
 
-### When to Stop and Reset
+### When to Stop
 
 **Immediate stop if:**
 - Tests fail unexpectedly
 - TypeScript strict mode errors
-- Token usage > 30K in session
 - Confusion about next steps
+- Large commits needed (break into 2-4 file chunks)
 
-**Planned resets:**
-- After every 5-7 prompts
-- Before starting new major task
-- When switching between files
-- After completing logical unit
+**Planned session end:**
+- After 10-15 files modified
+- When refactoring milestone complete
+- End of workday (save REFACTOR_PROGRESS.md)
 
 ---
 

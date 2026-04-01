@@ -269,8 +269,8 @@ Now that setup is complete:
    ```
 
 4. **Configure MCP Servers** (If needed)
-   - Read: [docs/MCP_SETUP.md](MCP_SETUP.md)
-   - Enable: GitHub, Postgres, Sentry as needed
+   - Optional: MCP servers (Claude Code integrated tools) are automatically available
+   - Common tools: GitHub, filesystem search, web fetch—no setup required
 
 5. **Monthly Maintenance**
    ```bash
@@ -304,10 +304,10 @@ Choose based on your project type:
 ## Getting Help
 
 **Documentation:**
-- [Workflow Guide](WORKFLOW_GUIDE.md) - Detailed workflow usage
-- [Troubleshooting](TROUBLESHOOTING.md) - Common issues and fixes
-- [MCP Setup](MCP_SETUP.md) - External tool integration
-- [FAQ](FAQ.md) - Frequently asked questions
+- [Configuration Guide](CONFIGURATION.md) - Advanced setup and optimization
+- [Token Economics](TOKEN_ECONOMICS.md) - Budget planning and efficiency
+- [Aliases Reference](ALIASES.md) - All available shell shortcuts
+- [Success Guide](SUCCESS_GUIDE.md) - Learning path and metrics
 
 **Community:**
 - GitHub Issues: Bug reports and feature requests

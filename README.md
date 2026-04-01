@@ -1,10 +1,10 @@
 # 🤖 Claude Code Playbook
 
-**Version**: 4.1.3 | **License**: MIT | **Repository**: https://github.com/chokmah-me/claude-code-playbook
+**Version**: 4.2.0 | **License**: MIT | **Repository**: https://github.com/chokmah-me/claude-code-playbook
 
-A token-efficient AI engineering system that reduces conversation turns through specialized workflows.
+A token-efficient AI engineering system that reduces conversation turns through specialized workflows and agentic patterns.
 
-**✨ New in v4.1.3**: Major documentation restructure with focused guides, enhanced PowerShell support, and improved cross-platform compatibility.
+**✨ New in v4.2.0**: Updated to April 2026 best practices with Plan Mode integration, Explore subagents, persistent memory, and modern token efficiency (no more manual /clear resets).
 
 ---
 
@@ -34,8 +34,8 @@ ccnew  # Start session
 
 **✅ Success indicators:**
 - Workflows execute without errors
-- Token usage stays under 25K per session  
-- Context resets work smoothly
+- Refactoring plan completes in 2-4 sessions
+- REFACTOR_PROGRESS.md tracks multi-session work
 - You're productive within 30 minutes
 
 **📖 [Complete 15-Minute Setup Guide →](docs/GETTING_STARTED.md)**
@@ -47,7 +47,8 @@ ccnew  # Start session
 **Core Features:**
 - **🖥️ Cross-Platform** - Windows (PowerShell), Mac, Linux
 - **⚡ 26+ Aliases** - Save 8+ minutes/day (`ccnew`, `cctriage`, `cchealth`)
-- **📊 Token Efficient** - Stay under 25K tokens/session
+- **🧠 Agentic Patterns** - Plan Mode, Explore subagents, memory system, task tracking
+- **📊 Token Efficient** - Modern high-context workflows (no manual /clear needed)
 - **🎓 7 Workflows** - triage, extract, modernize, qnew, qplan, qcode, catchup
 
 **Proven Results:**
@@ -63,12 +64,12 @@ ccnew  # Start session
 ```bash
 # Daily workflow
 cctriage    # Find issues (~2K tokens)
-ccplan      # Create plan (~3K tokens)  
-cccode      # Implement (~8-12K tokens)
-cccost      # Check usage
+ccplan      # Create plan + enter Plan Mode
+cccode      # Implement with progress tracking
+cchealth    # Check config health
 ```
 
-**💰 Budget**: Stay under 25K tokens/session for Claude Pro efficiency.
+**📋 Session continuity**: Automatic via REFACTOR_PROGRESS.md + memory files (no manual resets).
 
 ---
 
@@ -77,9 +78,10 @@ cccost      # Check usage
 | Guide | What You'll Learn | Time |
 |-------|-------------------|------|
 | **[🚀 Getting Started](docs/GETTING_STARTED.md)** | Complete setup & first workflow | 5 min |
+| **[🧠 Agentic Patterns](docs/AGENTIC_PATTERNS.md)** | Plan Mode, Explore agents, memory, tasks | 10 min |
 | **[⚙️ Configuration](docs/CONFIGURATION.md)** | Best practices & optimization | 8 min |
 | **[💡 Shell Aliases](docs/ALIASES.md)** | All 26+ shortcuts (Bash & PowerShell) | 6 min |
-| **[📊 Token Economics](docs/TOKEN_ECONOMICS.md)** | Optimize token usage | 7 min |
+| **[📊 Token Economics](docs/TOKEN_ECONOMICS.md)** | Budget planning & efficiency | 7 min |
 | **[🏆 Success Guide](docs/SUCCESS_GUIDE.md)** | Learning path & metrics | 10 min |
 
 **Platform-Specific:**

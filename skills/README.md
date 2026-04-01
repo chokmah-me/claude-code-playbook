@@ -20,7 +20,7 @@ This directory contains skills for AI-assisted development with Claude Code.
     │   ├── qcode.md
     │   └── catchup.md
     └── knowledge/            # Reference materials
-        ├── typescript-patterns.md
+        ├── typescript-style.md
         └── architecture-patterns.md
 ```
 
@@ -28,7 +28,7 @@ This directory contains skills for AI-assisted development with Claude Code.
 
 ### 1. Python Scientific Computing
 
-**Location**: `.claude/skills/python-scientific/SKILL.md`
+**Location**: `skills/python-scientific/SKILL.md` (also mirrored to `.claude/skills/python-scientific/SKILL.md`)
 
 **Purpose**: Best practices for research-grade Python development with NumPy/SciPy
 
