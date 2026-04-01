@@ -1,14 +1,16 @@
 # 🤖 AI-Assisted Development Guide
 
-This document describes the AI-assisted development capabilities integrated into the ACP Simulation project using the Claude Code Playbook v3.0.0.
+> ⚠️ **Deprecated**: This document was written for ACP Simulation v3.0.0.
+>
+> For current guidance, see **[AGENTIC_PATTERNS.md](AGENTIC_PATTERNS.md)** (April 2026 update) and **[GETTING_STARTED.md](GETTING_STARTED.md)**.
 
 ---
 
 ## Overview
 
-The ACP Simulation project now includes a comprehensive AI-assisted development system that enables token-efficient collaboration with Claude Code for refactoring, code improvement, and maintenance tasks.
+The Claude Code Playbook provides a comprehensive AI-assisted development system that enables token-efficient collaboration with Claude Code for refactoring, code improvement, and maintenance tasks.
 
-**Repository**: https://github.com/dyb5784/acp-simulation
+**Repository**: https://github.com/chokmah-me/claude-code-playbook
 
 ---
 

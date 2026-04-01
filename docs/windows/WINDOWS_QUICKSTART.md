@@ -1,5 +1,7 @@
 # Windows 10 PowerShell Quick Start Guide
-**Claude Code Playbook v4.1.0**
+**Claude Code Playbook v4.2.0** (Updated April 2026)
+
+> See **[AGENTIC_PATTERNS.md](../AGENTIC_PATTERNS.md)** for April 2026 modernizations (Plan Mode, Explore agents, etc.)
 
 ## Prerequisites
 - ✓ Windows 10
