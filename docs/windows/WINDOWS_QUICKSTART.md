@@ -232,6 +232,6 @@ If you also use Git Bash:
 
 ---
 
-**Last Updated:** 2025-12-25
-**Version:** 4.1.0
+**Last Updated:** 2026-04-01
+**Version:** 4.2.0
 **Profile Location:** `C:\Users\danie\Documents\PowerShell\claude-code-profile.ps1`

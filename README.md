@@ -150,7 +150,7 @@ We welcome contributions! See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
 ---
 
-**Version**: 4.1.3 | **Date**: December 25, 2025 | **Status**: ✅ Production Ready
+**Version**: 4.2.0 | **Date**: April 1, 2026 | **Status**: ✅ Production Ready
 
 ---
 

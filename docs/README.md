@@ -161,4 +161,4 @@ This documentation is updated with each release. Check the main README for:
 - Updated guides
 - Platform support changes
 
-**Last Updated**: December 25, 2025 (v4.1.3)
+**Last Updated**: April 1, 2026 (v4.2.0)
