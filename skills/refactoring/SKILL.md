@@ -6,7 +6,7 @@ This skill provides a comprehensive suite of workflows for surgical and safe mod
 
 **Primary Goal:** Transform monolithic, tightly-coupled code into modular, maintainable, well-tested components following modern architectural patterns.
 
-**Pro Subscription Awareness:** All workflows are designed to work within 10-40 prompts per 5-hour window. Use `/cost` every 3 prompts to track token burn.
+**Token Efficiency:** Workflows are designed for modern high-context Claude models. Use token-aware strategies (Plan Mode, memory files, Explore subagents) for efficient multi-session work.
 
 ---
 
@@ -39,7 +39,7 @@ Run any workflow with: `claude skills refactoring <workflow-name>`
 | **triage** | Find top 3 technical debt hotspots | ~2K | Start of refactoring project |
 | **extract** | Extract code block to new module | ~5K | Targeted function decomposition |
 | **modernize** | Update syntax and patterns | ~4K | Post-extraction cleanup |
-| **catchup** | Resume after `/clear` | ~1-2K | Every 5-7 prompts |
+| **catchup** | Resume after break | ~1-2K | Between sessions |
 | **qnew** | Fresh session initialization | ~2K | Start of work session |
 | **qplan** | Validate refactoring plan | ~3K | Before implementation |
 | **qcode** | Full implementation cycle | ~8-12K | Execute approved plan |
@@ -114,10 +114,11 @@ Run any workflow with: `claude skills refactoring <workflow-name>`
 - Update patterns in extracted code
 - Add documentation
 
-**5. Reset** → `/clear` then `claude skills refactoring catchup`
+**5. Continue** → `claude skills refactoring catchup` (between sessions)
+- Restore context from REFACTOR_PROGRESS.md
 - Continue with next target
 
-**⚠️ Session Reset Protocol:** Execute `/clear` after every 5-7 prompts to avoid context degradation. Token budget is limited—resetting early saves tokens and maintains quality.
+**⚠️ Session Continuity:** Use REFACTOR_PROGRESS.md to track multi-session work. Memory files and task lists provide context persistence—no manual `/clear` resets needed.
 
 ---
 
@@ -147,11 +148,11 @@ Workflows automatically reference these files when making decisions about code s
 ## 💡 Field-Tested Best Practices
 
 ### Session Management
-- **Never** skip `/clear + catchup` protocol
-- **Always** run `/cost` every 3 prompts
+- **Use Plan Mode** (`/plan` skill) before major refactorings
+- **Track progress** in `REFACTOR_PROGRESS.md` for multi-session work
 - **Stop** if TypeScript errors appear—fix before continuing
 - **Batch** changes into 10-15 file increments max
-- **Document** progress in `REFACTOR_PROGRESS.md`
+- **Commit atomically** every 2-4 files with clear messages
 
 ### Workflow Selection
 - Use **triage** once per project/sprint
@@ -190,8 +191,8 @@ If ANY fail: STOP and fix before proceeding.
 **Pitfall:** Forgetting to commit incrementally
 **Solution:** Commit every 2-4 files, don't wait until end
 
-**Pitfall:** Ignoring the `/clear + catchup` protocol
-**Solution:** Set a timer, reset every 5-7 prompts religiously
+**Pitfall:** Not maintaining session state across breaks
+**Solution:** Diligently update REFACTOR_PROGRESS.md before stopping work
 
 **Pitfall:** Not tracking progress
 **Solution:** Maintain REFACTOR_PROGRESS.md for complex refactorings

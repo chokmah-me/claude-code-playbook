@@ -11,9 +11,9 @@ This workflow initializes a new refactoring session by loading project context a
 
 Use this workflow at the start of:
 - A new work session (morning, after break)
-- After `/clear` when starting fresh
 - When switching between projects
 - When you want to verify Claude understands the project
+- **Tip:** If resuming with `REFACTOR_PROGRESS.md` already present, use `catchup` instead
 
 ## Step 1: Load Project Constitution
 
@@ -24,20 +24,20 @@ Reading: CLAUDE.md
 ```
 
 **Extract key information:**
-- Budget constraints (Claude Pro: 10-40 prompts per 5 hours)
 - Architectural goals (modern patterns, functional composition, Result monads)
 - Non-negotiable rules (API surface preservation, test requirements)
 - Diagnostic commands (type-check, test:unit, lint)
 - Current refactoring objectives
+- Session continuity strategy (REFACTOR_PROGRESS.md usage)
 
 ## Step 2: Load Additional Context
 
 Read supporting configuration files if they exist:
 
 ```
-Reading: .cursorrules (if exists)
-Reading: .claude/skills/refactoring/knowledge/typescript-style.md
+Reading: .claude/skills/refactoring/knowledge/typescript-style.md (or appropriate lang style guide)
 Reading: .claude/skills/refactoring/knowledge/architecture-patterns.md
+Reading: REFACTOR_PROGRESS.md (if exists — shows prior work)
 ```
 
 ## Step 3: Scan Project Structure
@@ -94,10 +94,9 @@ Provide a summary of your understanding:
 - Priority: [From CLAUDE.md]
 
 ### Constraints
-- Budget: Claude Pro (10-40 prompts per 5 hours)
-- Model: Sonnet 4.5 only
 - Batch size: 10-15 files per session max
 - Testing: All changes must pass tests before commit
+- No manual `/clear` resets — use REFACTOR_PROGRESS.md for continuity
 
 ### Available Workflows
 - `triage` - Find refactoring targets
@@ -112,10 +111,10 @@ Provide a summary of your understanding:
 - Types: `npm run type-check`
 - Lint: `npm run lint`
 
-### Session Protocol
-- Run `/cost` every 3 prompts
-- Run `/clear` + `catchup` every 5 prompts
-- Commit after each logical unit of work
+### Session Continuity
+- Update REFACTOR_PROGRESS.md before stopping work
+- Commit after each logical unit of work (2-4 files)
+- Use `catchup` workflow when resuming from saved progress
 ```
 
 ## Step 6: Check for In-Progress Work

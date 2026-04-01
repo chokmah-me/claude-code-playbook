@@ -5,17 +5,17 @@ description: "Resume work after context reset - reads changes and progress"
 
 # Resume Refactoring Session
 
-This workflow restores context after running `/clear` so you can continue refactoring where you left off.
+This workflow restores context by reading saved progress and recent changes, allowing you to resume refactoring work seamlessly.
 
 ## Purpose
 
 Use this workflow when:
-- You've run `/clear` to reset context
-- You're starting work after a break
-- Your session was interrupted
-- You need to refresh understanding of recent changes
+- You're resuming work from a prior session
+- A session was interrupted and needs recovery
+- You want to refresh understanding of recent changes
+- REFACTOR_PROGRESS.md exists with prior session context
 
-**⚠️ IMPORTANT:** Always run `/clear` + `catchup` every 5-7 prompts to maintain optimal performance within Claude Pro budget limits.
+**How it works:** Reads git history, REFACTOR_PROGRESS.md, and recent file changes to reconstruct your prior context without manual `/clear` resets.
 
 ## Step 1: Check Git Status
 

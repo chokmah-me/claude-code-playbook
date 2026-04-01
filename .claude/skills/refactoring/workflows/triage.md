@@ -5,7 +5,7 @@ description: "Analyze codebase to find top 3 technical debt hotspots"
 
 # Codebase Triage for Refactoring
 
-This workflow analyzes your TypeScript codebase to identify the top 3 files with the most significant technical debt.
+This workflow analyzes your codebase to identify the top 3 files with the most significant technical debt using modern analysis tools.
 
 ## Purpose
 
@@ -15,109 +15,58 @@ Use this workflow to:
 - Prioritize refactoring efforts
 - Understand codebase complexity
 
-## Step 1: Scan TypeScript Files
+## Step 1: Launch Explore Agent for Initial Scan
 
-Find all TypeScript files in the project:
+Use an Explore agent to efficiently discover the codebase structure:
 
-```bash
-# Scan for .ts files (excluding .d.ts and test files)
-find . -name "*.ts" ! -name "*.d.ts" ! -name "*.test.ts" ! -name "*.spec.ts" | head -50
+**Agent Task:**
+```
+Launch: Agent(subagent_type=Explore)
+
+Task: Scan the codebase and identify:
+1. Total count of source files (TypeScript, Python, or primary language)
+2. Files larger than 500 lines (show paths and line counts)
+3. Files with multiple concerns (mixing DB, API, business logic)
+4. Files with code smells (any types, console logs, TODO comments)
+5. Dependency counts for top 10 most-imported files
+
+Use Glob to find source files and Grep to count patterns efficiently.
+Return a table with file paths, LOC, complexity indicators, and debt scores.
 ```
 
-Present the list to the user:
+## Step 2: Analyze Results
+
+The Explore agent will return a scored analysis. Review the table and identify patterns:
+
+- **High LOC** (>500 lines) = complexity risk
+- **Multiple concerns** (DB + API + business logic) = extraction candidates
+- **High dependency count** (>20 imports) = tight coupling
+- **Code smells** (any types, debugging artifacts) = quality debt
+
+## Step 3: Present Top 3 Candidates
+
+Create a prioritized list:
 
 ```markdown
-### TypeScript Files Found
+## Top 3 Refactoring Candidates
 
-Found {X} TypeScript files in the project:
+### 1. [filename] (Debt Score: X/100)
+- **LOC**: X lines
+- **Complexity**: X indicators
+- **Dependencies**: X imports
+- **Issues**: [list specific concerns]
+- **Recommended Action**: [extract, modernize, or decompose]
 
-**Source files** (showing first 50):
-- {file1.ts}
-- {file2.ts}
-- ...
-
-Would you like me to analyze all files, or focus on a specific directory?
+### 2. [filename] (Debt Score: X/100)
+...
 ```
 
-## Step 2: Analyze Each File
-
-For each TypeScript file, calculate a "technical debt score" based on:
-
-### 2a. Lines of Code (LOC)
-```bash
-# Count lines in file
-wc -l {file.ts}
-```
-
-**Scoring:**
-- < 200 lines: 0 points
-- 200-500 lines: 10 points
-- 500-1000 lines: 30 points
-- 1000-2000 lines: 60 points
-- > 2000 lines: 100 points
-
-### 2b. Cyclomatic Complexity
-
-Count complexity indicators by reading the file:
-- Nested conditionals (if/else, switch, ternary)
-- Loops (for, while, forEach)
-- Logical operators (&&, ||)
-- Try/catch blocks
-
-**Scoring:**
-- < 10 complexity points: 0 points
-- 10-20 complexity: 10 points
-- 20-40 complexity: 30 points
-- > 40 complexity: 50 points
-
-### 2c. Dependency Count
-
-Count imports/exports:
-```bash
-# Count import statements
-grep -c "^import " {file.ts}
-
-# Count from statements
-grep -c "from " {file.ts}
-```
-
-**Scoring:**
-- < 10 dependencies: 0 points
-- 10-20 dependencies: 5 points
-- 20-30 dependencies: 15 points
-- > 30 dependencies: 30 points
-
-### 2d. God Object Indicators
-
-Check for mixed concerns by searching for keywords:
-```bash
-# Database keywords
-grep -c "query\|select\|insert\|update\|delete" {file.ts}
-
-# API/HTTP keywords
-grep -c "get\|post\|put\|delete\|router\|endpoint" {file.ts}
-
-# Business logic keywords
-grep -c "calculate\|validate\|process\|transform" {file.ts}
-```
-
-**If 2+ concern types found:** +30 points
-
-### 2e. Code Smell Indicators
-
-```bash
-# Any types
-grep -c ": any" {file.ts}
-
-# Console logs (debug code left behind)
-grep -c "console.log" {file.ts}
-
-# TODO comments
-grep -c "TODO\|FIXME\|HACK" {file.ts}
-```
-
-**Scoring:**
-- Each any type: +2 points
+**Scoring Guide:**
+- Lines of Code: 200-500 (10pts), 500-1000 (30pts), 1000+ (60pts)
+- Cyclomatic Complexity: 10-20 (10pts), 20-40 (30pts), 40+ (50pts)
+- Dependencies: 10-20 (5pts), 20-30 (15pts), 30+ (30pts)
+- Mixed Concerns: 2+ types (30pts)
+- Code Smells: 2 pts per `any`, 1 pt per console/TODO
 - Each console.log: +1 point
 - Each TODO: +1 point
 
@@ -149,88 +98,53 @@ Create the final report:
 ```markdown
 ### Codebase Triage Report
 
-**🎯 Top 3 Refactoring Priorities:**
+## Step 4: Suggest Refactoring Approach
 
-1. **File:** `{file1.ts}`
-   - **Debt Score:** {score}/200
-   - **LOC:** {lines} lines
-   - **Diagnosis:** {specific issue - God Object / High Complexity / etc.}
-   - **Impact:** {why this is a problem}
-   - **Specific Issues:**
-     - {issue 1}
-     - {issue 2}
-     - {issue 3}
-
-2. **File:** `{file2.ts}`
-   - **Debt Score:** {score}/200
-   - **LOC:** {lines} lines
-   - **Diagnosis:** {specific issue}
-   - **Impact:** {why this is a problem}
-   - **Specific Issues:**
-     - {issue 1}
-     - {issue 2}
-
-3. **File:** `{file3.ts}`
-   - **Debt Score:** {score}/200
-   - **LOC:** {lines} lines
-   - **Diagnosis:** {specific issue}
-   - **Impact:** {why this is a problem}
-   - **Specific Issues:**
-     - {issue 1}
-     - {issue 2}
-
-**📈 Overall Codebase Health:**
-- Total files analyzed: {X}
-- Average debt score: {Y}
-- Files with high debt (>80): {Z}
-- Recommended focus areas: {list}
-
-**📈 Next Recommended Action:**
-Focus on #{ranking} priority: `{filename}`
-
-Suggested approach:
-1. Run `qplan` to design extraction strategy
-2. Use `extract` workflow to decompose 1-2 functions
-3. Use `modernize` workflow to update patterns
-4. Iterate until file debt score < 50
-
-**Budget Estimate:**
-- High priority files: 8-12 prompts each
-- Medium priority files: 5-8 prompts each
-- Low priority files: 3-5 prompts each
-```
-
-## Step 5: Provide Detailed Recommendations
-
-For the #1 priority file, provide specific recommendations:
+For the top 3 candidates, recommend actions:
 
 ```markdown
-### Detailed Recommendations for {#1 File}
+## Refactoring Plan
 
-**Current State:**
-- {lines} lines of code
-- {complexity} cyclomatic complexity
-- {dependencies} dependencies
+### Priority 1: [filename] (Quick win)
+- **Action**: Extract [specific functions] to separate module
+- **Effort**: 1-2 hours
+- **Benefit**: Reduce to <300 LOC, break tight coupling
+- **Next**: Run `extract` workflow
 
-**Quick Wins** (low effort, high impact):
-1. Extract {specific function} to new module
-2. Remove {X} console.log statements
-3. Replace {Y} any types with specific types
+### Priority 2: [filename] (Medium effort)
+- **Action**: Decompose mixed concerns (DB/API/Logic)
+- **Effort**: 3-4 hours
+- **Benefit**: Enable independent testing and evolution
+- **Next**: Run `qplan`, then `extract`
 
-**Medium Effort:**
-1. Split into {X} feature modules
-2. Extract database logic to separate layer
-3. Convert to Result<T,E> error handling
+### Priority 3: [filename] (Long-term)
+- **Action**: Modernize error handling to Result<T,E>
+- **Effort**: 4-6 hours
+- **Benefit**: Type-safe error propagation
+- **Next**: Run `modernize` workflow
+```
 
-**Long Term:**
-1. Decompose into Manager/Endpoint/Database pattern
-2. Move to src/features/{domain}/
-3. Add comprehensive test coverage
+## Step 5: Generate Debt Report
 
-**Estimated Effort:**
-- Quick wins: 1-2 sessions (4-8 prompts)
-- Medium: 3-4 sessions (12-16 prompts)
-- Long term: 6-8 sessions (24-32 prompts)
+Provide a summary for team visibility:
+
+```markdown
+## Technical Debt Summary
+
+**Codebase Health Score**: [X]/100
+
+| File | LOC | Complexity | Issues | Action |
+|------|-----|-----------|--------|--------|
+| {file1} | {X} | {Y} | {Z} | Extract |
+| {file2} | {X} | {Y} | {Z} | Modernize |
+| {file3} | {X} | {Y} | {Z} | Decompose |
+
+**Key Issues**:
+- {count} files over 500 LOC
+- {count} files with mixed concerns
+- {count} instances of code smells
+
+**Recommended Focus**: Start with Priority 1 (highest ROI per effort)
 ```
 
 ---
