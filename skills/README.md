@@ -9,19 +9,34 @@ This directory contains skills for AI-assisted development with Claude Code.
 ├── README.md (this file)
 ├── python-scientific/         # Python scientific computing patterns
 │   └── SKILL.md              # NumPy, reproducibility, performance
-└── refactoring/              # General code refactoring
-    ├── SKILL.md              # Skill overview
-    ├── workflows/            # Development workflows
-    │   ├── triage.md
-    │   ├── extract.md
-    │   ├── modernize.md
-    │   ├── qnew.md
-    │   ├── qplan.md
-    │   ├── qcode.md
-    │   └── catchup.md
-    └── knowledge/            # Reference materials
-        ├── typescript-style.md
-        └── architecture-patterns.md
+├── refactoring/              # General code refactoring
+│   ├── SKILL.md              # Skill overview
+│   ├── workflows/            # Development workflows
+│   │   ├── triage.md
+│   │   ├── extract.md
+│   │   ├── modernize.md
+│   │   ├── qnew.md
+│   │   ├── qplan.md
+│   │   ├── qcode.md
+│   │   └── catchup.md
+│   └── knowledge/            # Reference materials
+│       ├── typescript-style.md
+│       └── architecture-patterns.md
+├── debugging/                # Bug diagnosis & root-cause analysis
+│   ├── SKILL.md
+│   └── workflows/
+│       ├── diagnose.md       # Reproduce → isolate → hypothesize → verify → fix
+│       └── trace.md          # Trace execution paths through codebase
+├── documentation/            # Documentation accuracy & generation
+│   ├── SKILL.md
+│   └── workflows/
+│       ├── audit.md          # Scan for code/docs drift
+│       └── generate.md       # Generate docs from code
+└── onboarding/               # Codebase orientation for newcomers
+    ├── SKILL.md
+    └── workflows/
+        ├── orient.md         # Guided architecture walkthrough
+        └── glossary.md       # Extract domain vocabulary
 ```
 
 ## Available Skills
@@ -86,6 +101,51 @@ claude skills refactoring triage
 claude skills refactoring qnew
 ```
 
+### 3. Debugging & Root-Cause Analysis
+
+**Location**: `.claude/skills/debugging/SKILL.md`
+
+**Purpose**: Structured bug diagnosis instead of guess-and-check
+
+**Available Workflows**:
+- **diagnose**: Full root-cause cycle (reproduce → isolate → hypothesize → verify → fix)
+- **trace**: Map execution paths through unfamiliar code
+
+**When to Use**:
+- Test failures with non-obvious causes
+- Runtime errors or unexpected behavior
+- Understanding how data flows through the system
+
+### 4. Documentation
+
+**Location**: `.claude/skills/documentation/SKILL.md`
+
+**Purpose**: Keep docs accurate and generate docs from code
+
+**Available Workflows**:
+- **audit**: Find discrepancies between docs and code
+- **generate**: Create markdown docs from code signatures
+
+**When to Use**:
+- Before releases (verify doc accuracy)
+- After major refactors (update affected docs)
+- New modules that need documentation
+
+### 5. Onboarding & Repo Orientation
+
+**Location**: `.claude/skills/onboarding/SKILL.md`
+
+**Purpose**: Build a mental model of an unfamiliar codebase quickly
+
+**Available Workflows**:
+- **orient**: Structured walkthrough (architecture → key files → conventions → gotchas)
+- **glossary**: Extract domain terms and project vocabulary
+
+**When to Use**:
+- First time in a repository
+- Onboarding new team members
+- Cross-team work requiring shared vocabulary
+
 ## Skill Selection Guide
 
 | Task Type | Primary Skill | Notes |
@@ -93,10 +153,16 @@ claude skills refactoring qnew
 | Optimize simulation | Python Scientific | Focus on vectorization |
 | Add type hints | Python Scientific | Use numpy.typing |
 | Fix numerical bug | Python Scientific | Check reproducibility |
-| Restructure modules | General Refactoring | Use extract workflow |
+| Restructure modules | Refactoring | Use extract workflow |
 | Add new feature | Python Scientific + Refactoring | Combine both |
 | Performance tuning | Python Scientific | Profile first |
-| Code review | Both | Check patterns from both |
+| Code review | Refactoring | Check patterns |
+| Debug test failure | Debugging | Use diagnose workflow |
+| Trace data flow | Debugging | Use trace workflow |
+| Verify docs accuracy | Documentation | Use audit workflow |
+| Generate module docs | Documentation | Use generate workflow |
+| New to a codebase | Onboarding | orient + glossary |
+| Understand domain terms | Onboarding | Use glossary workflow |
 
 ## Usage Patterns
 
@@ -154,6 +220,7 @@ To add a new skill:
 
 ## Version History
 
+- **v2.0** (2026-04-01): Added Debugging, Documentation, and Onboarding skills
 - **v1.0** (2025-12-11): Initial skills directory with Python Scientific Computing
 - **v0.9** (2025-12-10): General Refactoring skill added
 
