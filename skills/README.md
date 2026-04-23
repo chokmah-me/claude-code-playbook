@@ -152,7 +152,30 @@ claude skills refactoring qnew
 - Onboarding new team members
 - Cross-team work requiring shared vocabulary
 
-### 6. Skill Extractor
+### 6. Skill Creator
+
+**Location**: `.claude/skills/skill-creator/SKILL.md`
+
+**Purpose**: Generate production-ready skills from intent (design-first approach)
+
+**Available Workflows**:
+- **create**: Design and generate a complete skill from domain description
+- **audit**: Validate an existing skill against quality standards
+
+**When to Use**:
+- You have a new domain and want a complete skill
+- Validating a skill meets playbook quality standards
+- Creating skills that are token-efficient and well-structured
+
+**Quick Start**:
+```
+Run the create workflow to design a skill from scratch:
+- Describe your domain (1-3 sentences)
+- Specify 2-4 workflows needed
+- Get a complete skill with all files and validation
+```
+
+### 7. Skill Extractor
 
 **Location**: `.claude/skills/skill-extractor/SKILL.md`
 
@@ -184,6 +207,8 @@ claude skills refactoring qnew
 | Generate module docs | Documentation | Use generate workflow |
 | New to a codebase | Onboarding | orient + glossary |
 | Understand domain terms | Onboarding | Use glossary workflow |
+| Create a new skill | Skill Creator | Use create workflow |
+| Validate skill quality | Skill Creator | Use audit workflow |
 | Formalize repeated workflow | Skill Extractor | Use extract workflow |
 | Improve a skill | Skill Extractor | Use refine workflow |
 
