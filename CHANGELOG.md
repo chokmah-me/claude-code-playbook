@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [4.3.0] - 2026-04-22
+
+### Added
+
+- **Skill Creator** — New design-first skill for generating production-ready skills from intent
+  - `create` workflow: Design and generate complete skills (SKILL.md + workflows + validation)
+  - `audit` workflow: Validate skills against quality standards (7-category checklist)
+  - `knowledge/quality-standards.md`: Token budgets, required sections, actionability rules
+  - Complements skill-extractor (reactive pattern mining) with proactive design approach
+- Skill count: 6 → 7 skills, 15 → 17 workflows
+
+---
+
 ## [4.1.3] - 2025-12-25
 
 ### 🎉 Major Documentation Restructure & Enhanced PowerShell Support

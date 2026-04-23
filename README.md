@@ -1,10 +1,10 @@
 # 🤖 Claude Code Playbook
 
-**Version**: 4.2.1 | **Date**: April 1, 2026 | **License**: MIT | **Repository**: https://github.com/chokmah-me/claude-code-playbook
+**Version**: 4.3.0 | **Date**: April 22, 2026 | **License**: MIT | **Repository**: https://github.com/chokmah-me/claude-code-playbook
 
 A token-efficient AI engineering system that reduces conversation turns through specialized workflows and agentic patterns.
 
-Includes Plan Mode integration, Explore subagents, persistent memory, and 6 skill domains with 15 reusable workflows.
+Includes Plan Mode integration, Explore subagents, persistent memory, and 7 skill domains with 17 reusable workflows.
 
 ---
 
