@@ -1,0 +1,76 @@
+# .claudeignore — advisory signal layer
+# These paths are excluded from Claude's proactive context loading.
+# Note: Claude CAN still read these if it judges them necessary.
+# For hard enforcement, also add to permissions.deny in .claude/settings.json
+
+# Dependencies — never relevant to code review
+node_modules/
+vendor/
+.venv/
+venv/
+
+# Build outputs
+dist/
+build/
+out/
+.next/
+.nuxt/
+target/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.so
+*.egg-info/
+.eggs/
+
+# Lock files — too large, Claude can't act on them
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+poetry.lock
+Cargo.lock
+uv.lock
+Pipfile.lock
+composer.lock
+
+# Generated files
+*.generated.*
+*.min.js
+*.min.css
+*.bundle.js
+*.map
+
+# Test coverage artifacts
+coverage/
+.coverage
+htmlcov/
+.pytest_cache/
+.nyc_output/
+
+# IDE and OS
+.idea/
+.vscode/
+*.swp
+*~
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Large data files
+*.csv
+*.parquet
+*.pkl
+*.h5
+*.bin
+data/
+datasets/
+
+# Secrets — also add permissions.deny for these
+.env
+.env.*
+*.pem
+*.key

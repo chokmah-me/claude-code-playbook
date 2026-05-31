@@ -1,0 +1,44 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+type: software
+title: "Claude Code Playbook"
+abstract: "A token-efficient AI engineering system for Claude Code providing structured workflows, agentic patterns, three-layer context optimization (don't-load, compress, cache), and security hardening for software development teams."
+authors:
+  - family-names: Bilar
+    given-names: Daniyel Yaacov
+    orcid: "https://orcid.org/0000-0002-9040-6914"
+    affiliation: "Chokmah LLC / Collaborative Dynamics, Inc."
+    email: chokmah-dyb@pm.me
+repository-code: "https://github.com/chokmah-me/claude-code-playbook"
+url: "https://github.com/chokmah-me/claude-code-playbook"
+license: MIT
+version: "4.4.0"
+date-released: "2026-05-31"
+keywords:
+  - claude-code
+  - ai-development
+  - refactoring
+  - token-optimization
+  - context-engineering
+  - supply-chain-security
+  - workflow-automation
+  - developer-tools
+  - agentic-patterns
+  - output-compression
+references:
+  - type: software
+    title: "Headroom"
+    authors:
+      - family-names: Chopra
+        given-names: Tejas
+    repository-code: "https://github.com/chopratejas/headroom"
+    license: Apache-2.0
+    notes: "Output compression layer used in Pattern 9 of this playbook's agentic patterns."
+  - type: article
+    title: "How to save millions in Claude tokens (code included)"
+    authors:
+      - family-names: Farooq
+        given-names: Hamza
+    url: "https://boringbot.substack.com/p/how-to-save-millions-in-claude-tokens"
+    date-published: "2026-05-29"
+    notes: "Source for CLAUDE.md token benchmarks, .claudeignore vs permissions.deny distinction, path-scoped rules 41% reduction benchmark."

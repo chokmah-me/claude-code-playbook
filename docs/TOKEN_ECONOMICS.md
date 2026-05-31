@@ -1,313 +1,240 @@
 # 📊 Token Economics
 
-**Complete guide to optimizing token usage and managing Claude Pro limits effectively.**
+**Three complementary layers: don't load it, compress it, cache it.**
 
 ---
 
-## 💰 Token Efficiency Strategy
+## The Token Floor Problem
 
-### Modern Claude Models (2026+)
-- **Capacity**: Extended context windows; no fixed 44K token ceiling
-- **Cost model**: Usage-based pricing (exact limits depend on plan)
-- **Best practice**: Monitor actual usage via Claude Code UI rather than preset budgets
+Before you type a single character, Claude Code has already consumed **20,000–30,000 tokens**. A GitHub issue (#52979 in the Claude Code repo) confirmed a simple "hi" prompt consumed ~31,000 tokens. That floor is what loads at session start:
 
-### Practical Efficiency Targets
-- **Healthy per-session usage**: 10-30K tokens (varies by task complexity)
-- **Per-prompt guideline**: 1-3K tokens typical
-- **Session planning**: Batch work logically; longer sessions are OK if on-track
+- System prompt and Claude Code internals
+- `CLAUDE.md` and any imported files (loaded in full, every turn)
+- `.claude/rules/` files without `paths:` frontmatter (also in full, every turn)
+- MCP server tool schemas — 400–800 tokens per connected server; heavy setups add 10,000–20,000 tokens
+- Memory files and skill descriptions
 
-**Token Efficiency Strategy:**
-- Use Explore subagents for codebase analysis (more efficient than manual grepping)
-- Use Plan Mode before major implementations
-- Maintain `REFACTOR_PROGRESS.md` for multi-session context persistence
-- Commit atomically to avoid re-explaining context
+This is your highest-leverage optimization surface. Every token you cut here is cut on every single turn, not just once.
+
+Run `/context` at any point in a session for a live breakdown by category. Run `/memory` to see exactly which files loaded at startup.
 
 ---
 
-## ⚡ Workflow Costs (Relative Guide)
+## Three Layers, Three Different Problems
 
-### Refactoring Workflows
-| Workflow | Relative Cost | Use Case | When |
-|----------|---------------|----------|------|
-| `triage` | Low (~2K) | Initial codebase analysis | Start of project |
-| `qnew` | Low (~2K) | Start new session | Session start |
-| `qplan` | Medium (~3K) | Plan refactoring approach | Before major changes |
-| `extract` | Medium (~5K) | Extract functions/modules | Targeted decomposition |
-| `modernize` | Medium (~4K) | Update code patterns | Post-extraction |
-| `qcode` | High (~8-12K) | Full implementation | Execute approved plan |
-| `catchup` | Low (~1-2K) | Resume from progress file | Between sessions |
+Token optimization has three independent levers. They address different stages of the request lifecycle and don't sum into one number.
 
-### Python Scientific Computing
-| Workflow | Token Cost | Use Case |
-|----------|------------|----------|
-| Vectorization review | 3,000 tokens | Optimize array operations |
-| Type hint analysis | 2,000 tokens | Add type annotations |
-| Performance profiling | 4,000 tokens | Identify bottlenecks |
-| Parallel processing | 5,000 tokens | Optimize for multiprocessing |
+| Layer | Technique | Measured reduction |
+|-------|-----------|-------------------|
+| **1. Don't load it** | Trim CLAUDE.md, `.claudeignore`, path-scoped rules | 41–92% of session startup overhead |
+| **2. Compress before send** | Headroom (tool outputs, logs, RAG, files) | 47–92% of dynamic context |
+| **3. Cache what's stable** | CacheAligner / prompt caching (API track) | 70–90% of repeated content cost |
+
+CLI subscription users pay with response quality, not money; bloated context dilutes Claude's attention and produces generic answers. API users pay per token. Both audiences benefit from all three layers.
 
 ---
 
-## 🔄 Session Protocol
+## Layer 1: Don't Load It
 
-### Multi-Session Continuity
-Before stopping work:
-1. Update `REFACTOR_PROGRESS.md` with completed tasks and next steps
-2. Commit your work atomically with clear messages
-3. On resumption: read `REFACTOR_PROGRESS.md`, then run `claude skills refactoring catchup`
+### CLAUDE.md — under 500 tokens
 
-**Why this works:**
-- Persistent context across session breaks
-- No manual context reset needed
-- Clear handoff for resumption
+Every Claude Code session loads `CLAUDE.md` into **every request**. It is the most expensive single file you control, paid on every turn, forever. Benchmarks comparing a 3,847-token CLAUDE.md with a 312-token version stripped to only what Claude cannot infer from the code found **91.9% context reduction** with no quality regression (source: token-optimizer benchmark, hamzafarooq/token-optimizer).
 
-### Example Session Flow
+Target: under 500 tokens. Anthropic's official guidance is under 200 lines. Some teams run at 60.
+
+**Cut anything Claude already knows from training:** framework routing conventions, standard syntax, generic best-practice advice, team rosters, meeting schedules, FAQs Claude can't act on. A useful test: would this genuinely surprise an experienced developer new to the repo? If not, remove it.
+
+**Keep:** non-obvious build and test commands, architecture decisions that go against framework defaults, project-specific constraints and gotchas.
+
+Three things most people don't know:
+
+- HTML comments (`<!-- internal note -->`) are stripped before injection. They cost zero tokens. Use them for notes to teammates, rationale, anything humans need that Claude doesn't.
+- `@path/to/file` imports are organizational only. All imported files still load at session start. Splitting CLAUDE.md across files saves no tokens.
+- Edits to CLAUDE.md during a session don't apply until the next restart or `/compact`. Claude reads it once at startup.
+
+If you run `headroom learn` (see Layer 2), it may auto-append corrections to CLAUDE.md from failed sessions. Review those entries before committing.
+
+### .claudeignore vs permissions.deny — use both
+
+`.claudeignore` is **advisory**. It signals to Claude that certain files are not relevant. Claude can still read ignored files if it decides they are necessary (documented in GitHub issues #36163, #51105).
+
+`permissions.deny` in `.claude/settings.json` is **enforced**. It blocks the Read tool for those paths entirely. Claude cannot read them regardless of what it decides.
+
+```json
+{
+  "permissions": {
+    "deny": ["Read(node_modules/**)", "Read(dist/**)", "Read(*.lock)"]
+  }
+}
 ```
-Session Goal: Extract 3 utility functions
 
-1. triage         (~2K tokens)  - identify candidates
-2. qplan          (~3K tokens)  - design extraction strategy
-3. extract × 3    (~15K tokens) - implement extractions
-4. commit + notes (~1K tokens)  - save progress
+The 85.5% context reduction benchmark for `.claudeignore` was measured on the signal layer. Teams with strict context discipline add `permissions.deny` on top.
 
-Total: ~21K tokens
+Minimum `.claudeignore` for any project:
+
 ```
+node_modules/
+dist/
+build/
+.next/
+__pycache__/
+*.pyc
+*.lock
+package-lock.json
+yarn.lock
+poetry.lock
+coverage/
+*.generated.*
+*.min.js
+*.min.css
+```
+
+Commit this to version control. Every team member gets the same context discipline automatically.
+
+### Path-scoped rules in .claude/rules/
+
+`.claude/rules/` lets you place rules files that load selectively. Rules **without** `paths:` frontmatter in the file header load at session start like a second CLAUDE.md with no savings. Rules **with** `paths:` frontmatter load only when Claude first touches a file matching that pattern, at zero cost until triggered.
+
+```yaml
+---
+paths:
+  - "src/api/**/*.ts"
+---
+# API Layer Rules
+All endpoints must validate input with Zod schemas.
+Response errors must use the shared ApiError class.
+Never return raw Prisma errors to the client.
+```
+
+This rule costs nothing during frontend work, database work, or test writing. It enters context only when Claude touches a file in `src/api/`. Path-scoped rules are invisible until needed.
+
+One documented case (Zenn, 2025) reduced always-loaded rule overhead from 1,358 lines to 807 lines (**41% reduction**) by converting procedure-heavy rule files into Skills and scoping domain-specific rules to their directories.
+
+### MCP server overhead
+
+Each connected MCP server loads its tool schema into every request by default. Heavy setups can add 10,000–20,000 tokens of silent per-session overhead.
+
+`ENABLE_TOOL_SEARCH=true` in Claude Code settings defers MCP tool schemas until actually needed, recovering 50,000–70,000 tokens in heavy multi-server setups.
+
+**Do not connect or disconnect MCP servers mid-session.** Doing so wipes your entire prompt cache. Make changes at session boundaries.
 
 ---
 
-## 📈 Token Usage Monitoring
+## Layer 2: Compress Before Send
 
-### Real-time Monitoring
+Even after optimizing startup load, dynamic context accumulates fast: tool outputs, test logs, file reads, search results. A single failing test suite can dump 10,000 lines into context. A grep over a large codebase can return thousands of matches. This content enters the window before Claude processes it.
+
+**[Headroom](https://github.com/chopratejas/headroom)** (Apache 2.0, 2.5k+ stars) compresses tool outputs, logs, RAG chunks, and files before they reach the LLM. It runs entirely locally; your data never leaves. Benchmarks on real agent workloads:
+
+| Workload | Before | After | Reduction |
+|----------|--------|-------|-----------|
+| Code search (100 results) | 17,765 | 1,408 | **92%** |
+| SRE incident debugging | 65,694 | 5,118 | **92%** |
+| GitHub issue triage | 54,174 | 14,761 | **73%** |
+| Codebase exploration | 78,502 | 41,254 | **47%** |
+
+Accuracy is preserved: GSM8K ±0.000 delta, BFCL tool calls 97% at 32% compression.
+
+**For Claude Code users, one command wraps the entire session:**
+
 ```bash
-# Check current usage
-/cost
-
-# Check after major operations
-claude skills refactoring qcode
-/cost
-
-# Check before context reset
-/cost
-/clear
+pip install "headroom-ai[all]"
+headroom wrap claude
 ```
 
-### Daily Usage Tracking
+All tool outputs are compressed before re-entering context. No code changes required.
+
+**headroom learn** mines failed sessions and writes corrections to your CLAUDE.md, automating part of the `catchup` workflow:
+
 ```bash
-# Start of day
-Session 1: 22,000 tokens ✅
-Session 2: 18,000 tokens ✅
-Session 3: 25,000 tokens ⚠️ (close to limit)
-Session 4: 15,000 tokens ✅
+headroom learn
 ```
+
+Review generated entries before committing; they are machine-written and may need token trimming.
+
+**Headroom as an MCP server** exposes `headroom_compress`, `headroom_retrieve`, and `headroom_stats` to any MCP client:
+
+```bash
+headroom mcp install
+```
+
+This is the one MCP server worth adding even when disabling others, because it reduces the token cost of every other MCP tool's output. It also integrates CacheAligner for Layer 3 benefits.
+
+**Six compression algorithms applied by content type:**
+
+- **SmartCrusher** — JSON arrays, nested objects, tool call results
+- **CodeCompressor** — AST-aware for Python, JS, Go, Rust, Java, C++
+- **Kompress-base** — HuggingFace prose model trained on agentic traces
+- **CacheAligner** — stabilizes prefixes so provider KV caches hit (Layer 3 synergy)
+- **IntelligentContext** — score-based context fitting with learned importance
+- **CCR (reversible)** — originals stored locally; LLM retrieves on demand via `headroom_retrieve`
+
+**Compared to alternatives:**
+
+| Tool | Scope | Local | Reversible |
+|------|-------|-------|------------|
+| Headroom | All context: tools, logs, RAG, files, history | Yes | Yes |
+| RTK | CLI command outputs only | Yes | No |
+| lean-ctx | CLI, MCP tools, editor rules | Yes | No |
+
+Headroom ships RTK as an included binary for shell-output rewriting; both tools compose cleanly.
 
 ---
 
-## 🎯 Optimization Strategies
+## Layer 3: Cache What's Stable (API Users)
 
-### 1. Context Management
-**Problem**: Growing context reduces available tokens  
-**Solution**: Reset every 5-7 prompts
-```bash
-# Before: 35,000 tokens (dangerous)
-# After reset: 8,000 tokens (safe)
-```
+For teams using Claude via the API, prompt caching cuts the cost of repeated content by 90%: cache reads cost $0.30/M vs $3.00/M for standard Sonnet 4 input tokens. A team burning 5M input tokens/day: ~$15,000 at standard rates vs ~$3,500 with 80% cache hit rate (~$4M annualized difference).
 
-### 2. Workflow Selection
-**Problem**: Using expensive workflows for simple tasks  
-**Solution**: Match workflow to task complexity
-```bash
-# For simple refactoring:
-cctriage + ccextract  # 7,000 tokens total
+Most teams enable caching and still see 5–15% savings instead of 70–90%. The gap is structural. Caching only works when prompts are built in a specific way:
 
-# For complex refactoring:
-cctriage + ccplan + cccode  # 17,000 tokens total
-```
+- Stable content (system prompt, CLAUDE.md) must appear before dynamic content
+- Cache boundaries must be placed deliberately
+- Any change to content before a cache boundary invalidates everything after it
 
-### 3. Prompt Efficiency
-**Problem**: Long, rambling prompts waste tokens  
-**Solution**: Concise, structured prompts
-```bash
-# Inefficient (500 tokens):
-"Can you please help me understand what's wrong with my code, I've been trying to figure it out for hours..."
+Headroom's **CacheAligner** handles prefix stabilization automatically so provider KV caches hit at the rates Anthropic advertises.
 
-# Efficient (100 tokens):
-"Analyze /src/main.py for performance issues. Focus on function complexity and database queries."
-```
-
-### 4. Response Filtering
-**Problem**: Unnecessarily detailed responses  **Solution**: Specify output requirements
-```bash
-# Efficient request:
-"List the top 3 performance issues in /src/main.py. Bullet points only, no explanations."
-```
+For Claude Code CLI users on subscription: prompt caching is handled internally. Layers 1 and 2 are the primary levers.
 
 ---
 
-## ⚠️ Warning Signs
+## Workflow Cost Reference
 
-### High Token Usage Indicators
-- **Single prompt >3,000 tokens** ⚠️
-- **Session >30,000 tokens** 🚨
-- **Context >35,000 tokens** 🚨
-- **Multiple sessions >25,000 tokens** ⚠️
+These assume CLAUDE.md is under 500 tokens and `.claudeignore` is in place. Without Layer 1 optimization, every cost increases by your unoptimized startup overhead.
 
-### Performance Degradation Signs
-- Slow response times
-- Repetitive or circular suggestions
-- Loss of project context
-- Increasing token usage per prompt
-
----
-
-## 💡 Advanced Optimization Techniques
-
-### 1. Strategic Context Resetting
-```bash
-# Before complex operation
-/cost
-# If >20,000 tokens, reset
-/clear
-claude skills refactoring catchup
-# Now you have fresh 8,000 token context
-```
-
-### 2. Workflow Chaining
-```bash
-# Efficient chaining:
-cctriage && ccplan && cccode
-# Total: 17,000 tokens in optimized context
-
-# Inefficient chaining:
-cctriage
-# ... 10 prompts later ...
-ccplan  
-# ... 10 prompts later ...
-cccode
-# Total: 25,000+ tokens with degraded context
-```
-
-### 3. Selective Context Restoration
-```bash
-# After reset, only restore what's needed
-claude skills refactoring catchup
-# Focus on current task, not entire session history
-```
+| Workflow | Relative cost | Best use |
+|----------|--------------|---------|
+| triage | Low (~2K) | Initial analysis, run once |
+| qnew | Low (~2K) | Session start |
+| qplan | Medium (~3K) | Design phase |
+| extract | Medium (~5K) | Single function |
+| modernize | Medium (~4K) | Pattern updates |
+| qcode | High (~8–12K) | Batch implementation |
+| catchup | Low (~1–2K) | Resume from progress file |
 
 ---
 
-## 📊 Token Economics by Use Case
+## Monthly Maintenance
 
-### Code Review Session (15 minutes)
 ```bash
-cctriage          # 2,000 tokens
-ccreview          # 3,000 tokens
-# 5 prompts       # 5,000 tokens
-cccommit          # 2,000 tokens
-Total: 12,000 tokens ✅
-```
+# Estimate CLAUDE.md token count
+python -c "
+with open('CLAUDE.md') as f:
+    words = len(f.read().split())
+print(f'{words} words ≈ {int(words*1.3)} tokens (target: <500)')
+"
 
-### Feature Implementation (30 minutes)
-```bash
-ccnew             # 2,000 tokens
-ccplan            # 3,000 tokens
-cccode            # 10,000 tokens
-# 8 prompts       # 8,000 tokens
-ccextract         # 5,000 tokens
-cccommit          # 2,000 tokens
-Total: 30,000 tokens ⚠️ (split into 2 sessions)
-```
-
-### Bug Fixing (20 minutes)
-```bash
-cctriage          # 2,000 tokens
-ccfix             # 4,000 tokens
-# 6 prompts       # 6,000 tokens
-cccommit          # 2,000 tokens
-Total: 14,000 tokens ✅
-```
-
----
-
-## 🎓 Learning Path for Token Efficiency
-
-### Beginner Level (Week 1-2)
-- ✅ Learn to check costs with `/cost`
-- ✅ Reset context every 5-7 prompts
-- ✅ Use efficient prompt structure
-- **Target**: <30,000 tokens per session
-
-### Intermediate Level (Week 3-4)
-- ✅ Plan sessions with token budgets
-- ✅ Choose appropriate workflows
-- ✅ Optimize prompt length
-- **Target**: <25,000 tokens per session
-
-### Advanced Level (Month 2+)
-- ✅ Strategic context management
-- ✅ Workflow chaining optimization
-- ✅ Selective context restoration
-- **Target**: <20,000 tokens per session
-
----
-
-## 🔧 Tools and Scripts
-
-### Health Check Script
-```bash
-# Check token efficiency
+# Full health check
 bash scripts/check_config_health.sh
 
-# Windows version
-powershell scripts/powershell/check_config_health.ps1
-```
-
-**Checks:**
-- Average tokens per session
-- Context reset frequency
-- Workflow efficiency
-- Token usage trends
-
-### Manual Tracking
-```bash
-# Create usage log
-echo "$(date): $(claude cost)" >> ~/claude_usage.log
-
-# Analyze patterns
-grep "Session" ~/claude_usage.log | awk '{sum+=$3; count++} END {print sum/count}'
+# If running Headroom
+headroom stats
 ```
 
 ---
 
-## 🚨 Common Token Waste Patterns
+## Related Documentation
 
-### 1. Context Bloat
-**Problem**: Never resetting context  
-**Cost**: 2x-3x token usage  
-**Solution**: Reset every 5-7 prompts
-
-### 2. Workflow Overkill
-**Problem**: Using complex workflows for simple tasks  
-**Cost**: 2x token usage  
-**Solution**: Match workflow to task complexity
-
-### 3. Prompt Rambling
-**Problem**: Long, unfocused prompts  
-**Cost**: 500+ tokens per prompt  
-**Solution**: Structured, concise prompts
-
-### 4. Response Overload
-**Problem**: Requesting unnecessarily detailed responses  
-**Cost**: 1,000+ tokens per response  
-**Solution**: Specify output format and scope
-
----
-
-## 📚 Related Documentation
-
-- **[Getting Started](GETTING_STARTED.md)** - Complete setup guide
-- **[Configuration](CONFIGURATION.md)** - Best practices and settings
-- **[Aliases](ALIASES.md)** - Productivity shortcuts
-- **[Success Guide](SUCCESS_GUIDE.md)** - Best practices and metrics
-
----
-
-**Next Guide**: [Success Guide](SUCCESS_GUIDE.md) →
+- [Getting Started](GETTING_STARTED.md) — setup
+- [Configuration](CONFIGURATION.md) — CLAUDE.md, .claudeignore, rules, MCP, security
+- [Agentic Patterns](AGENTIC_PATTERNS.md) — compression, hooks, memory, cross-agent patterns
+- [Success Guide](SUCCESS_GUIDE.md) — metrics and learning path

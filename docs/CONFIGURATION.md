@@ -1,90 +1,116 @@
 # ⚙️ Configuration Best Practices
 
-**Complete guide to configuring Claude Code Playbook for optimal performance and token efficiency.**
+**Complete guide to configuring Claude Code Playbook for optimal performance, token efficiency, and security.**
 
 ---
 
 ## 🏆 The Golden Rules
 
-### 1. Keep CLAUDE.md under 50 lines
-**Why**: More lines = more context = worse performance  
-**Focus on**: commands, paths, gotchas  
-**Exclude**: style guides, obvious info, lengthy docs  
+### 1. Keep CLAUDE.md under 500 tokens (not just lines)
 
-✅ **Good Example** (35 lines):
-```markdown
-# MyProject Configuration
+Every token in CLAUDE.md is paid on every single turn. A 3,847-token CLAUDE.md vs a 312-token version: 91.9% context reduction, no quality regression. Token count matters more than line count.
 
-**Tech Stack**: Python 3.9, Django 4.0, PostgreSQL 13
-**Main Commands**:
-- `python manage.py runserver` - Start dev server
-- `python manage.py test` - Run tests
-- `python manage.py migrate` - Apply DB migrations
-
-**Key Paths**:
-- `/src/` - Main application code
-- `/tests/` - Test files
-- `/config/` - Configuration files
-
-**Gotchas**:
-- Always run migrations after pulling
-- Use `DEBUG=True` for local development
-- Database resets require superuser recreation
-```
-
-❌ **Bad Example** (80+ lines with unnecessary details):
-```markdown
-# MyProject Configuration
-
-This is a Django application that I started working on in 2023...
-[Lengthy project history and detailed explanations]
-```
-
-### 2. Enable only MCP servers you use >50% of sessions
-**Why**: Each server adds 400-800 tokens  
-**Action**: Disable unused servers immediately  
-**Check**: Run `/context` to monitor token consumption  
-
-### 3. Use allowlists, not manual permissions
-**Why**: Pre-approves safe commands, reduces interruptions by 90%  
-**How**: Configure `.claude/settings.json` with allowed commands  
-**Pro tip**: Use `--dangerously-skip-permissions` with git safety net  
-
-### 4. Run health checks monthly
+Estimate before and after:
 ```bash
-# Monthly health check (Linux/Mac)
+python -c "
+with open('CLAUDE.md') as f:
+    words = len(f.read().split())
+print(f'{words} words ≈ {int(words*1.3)} tokens (target: <500)')
+"
+```
+
+HTML comments (`<!-- this note -->`) cost zero tokens — they're stripped before injection. Use them for teammate notes, rationale, and anything humans need that Claude doesn't.
+
+`@path/to/file` imports are organizational only. All imported files still load at session start. Splitting CLAUDE.md across files saves no tokens.
+
+### 2. Use .claudeignore and permissions.deny — they are different things
+
+`.claudeignore` is advisory. Claude can still read ignored files if it decides they're necessary (documented in GitHub issues #36163, #51105). It handles the signal layer.
+
+`permissions.deny` in `.claude/settings.json` is enforced. It blocks the Read tool for those paths entirely. Use both:
+
+```json
+{
+  "permissions": {
+    "deny": ["Read(node_modules/**)", "Read(dist/**)", "Read(*.lock)"]
+  }
+}
+```
+
+Minimum `.claudeignore` for any project:
+```
+node_modules/
+dist/
+build/
+.next/
+__pycache__/
+*.pyc
+*.lock
+package-lock.json
+yarn.lock
+poetry.lock
+coverage/
+*.generated.*
+*.min.js
+*.min.css
+```
+
+Commit `.claudeignore` to version control. Every team member gets the same context discipline.
+
+### 3. Use path-scoped rules in .claude/rules/
+
+Rules files in `.claude/rules/` without `paths:` frontmatter load at session start like a second CLAUDE.md. Rules with `paths:` frontmatter load only when Claude touches a matching file — zero cost until triggered.
+
+```yaml
+---
+paths:
+  - "src/api/**/*.ts"
+---
+All endpoints must validate input with Zod schemas.
+Response errors must use the shared ApiError class.
+```
+
+Move domain-specific rules here instead of CLAUDE.md. One team reduced always-loaded rule overhead by 41% this way.
+
+### 4. Enable only MCP servers you actually use
+
+Each connected MCP server loads its tool schema into every request — 400–800 tokens each. Heavy setups add 10,000–20,000 tokens of silent per-session overhead.
+
+`ENABLE_TOOL_SEARCH=true` in Claude Code settings defers schemas until needed, recovering 50,000–70,000 tokens in heavy setups.
+
+**Do not connect or disconnect MCP servers mid-session.** Doing so wipes your entire prompt cache. Make changes at session boundaries only.
+
+**Exception: Headroom's MCP server** (`headroom mcp install`) is worth adding even when disabling others, because it compresses the output of every other MCP tool, paying back its schema cost many times over.
+
+### 5. Treat .claude/ files as credential material
+
+The Mini Shai-Hulud supply chain worm (May 2026) writes persistence to `.claude/settings.json` and targets `~/.config/claude/claude_desktop_config.json` for credential theft. These are not just configuration files.
+
+After any supply chain incident (unexpected package behavior, CI anomalies, suspicious npm/pip output):
+- Inspect `.claude/settings.json` and `.claude/settings.local.json` for unexpected entries
+- Check `~/.config/claude/claude_desktop_config.json` for unexpected MCP tokens or server entries
+- Treat any API keys stored in MCP configs as potentially exfiltrated — rotate them
+
+Do not store long-lived API keys or tokens in MCP config files in plaintext. Use environment variables or a secrets manager, and reference them by name.
+
+### 6. Run health checks monthly
+
+```bash
 bash scripts/check_config_health.sh
-
-# Monthly health check (Windows)
-powershell scripts/powershell/check_config_health.ps1
 ```
-
-**Benefits**:
-- 🔍 Detects configuration issues before they impact productivity
-- 📊 Tracks token efficiency over time
-- ⚙️ Identifies unused MCP servers and commands
-- 🎯 Ensures best practices compliance
-
-### 5. Reset context every 5-7 prompts
-```bash
-/cost                              # Check usage
-/clear                             # Reset context
-claude skills refactoring catchup  # Restore context
-```
-
-**Why**: Prevents performance degradation, maintains token efficiency, preserves context quality
 
 ---
 
 ## 📊 Configuration Files Overview
 
-| File | Purpose | Commit to Git? | Size Limit | Location |
-|------|---------|----------------|------------|----------|
-| CLAUDE.md | Project guidelines | ✅ Yes | <50 lines | Project root |
-| .claude/settings.json | Permissions & tools | ✅ Yes | <3KB | .claude/ |
-| .mcp.json | External connections | ✅ Yes | <5KB | Project root |
-| CLAUDE.local.md | Personal preferences | ❌ No (gitignored) | No limit | Project root |
-| REFACTOR_PROGRESS.md | Session progress | ❌ No (temporary) | No limit | Project root |
+| File | Purpose | Commit? | Size target |
+|------|---------|---------|-------------|
+| CLAUDE.md | Project guidelines | Yes | <500 tokens |
+| .claude/settings.json | Permissions, tools, MCP | Yes | <3KB |
+| .claude/rules/*.md | Path-scoped rules | Yes | Per-file, small |
+| .mcp.json | MCP server config | Yes | <5KB |
+| CLAUDE.local.md | Personal preferences | No (gitignored) | No limit |
+| REFACTOR_PROGRESS.md | Session progress | No (temporary) | No limit |
 
 ---
 
@@ -92,224 +118,129 @@ claude skills refactoring catchup  # Restore context
 
 ### CLAUDE.md Template
 
-**Location**: `templates/CLAUDE.md.template`  
-**Purpose**: Main project configuration and guidelines  
-**Commit**: ✅ Yes (project-specific)  
+Cut these (Claude already knows them): framework routing, standard syntax, generic best practices, team contact info, FAQs.
 
-**Essential sections to customize:**
-1. **Project Overview** (1-2 lines)
-2. **Technology Stack** (bullet points)
-3. **Key Commands** (most used commands)
-4. **Important Paths** (source, tests, config)
-5. **Gotchas & Warnings** (common pitfalls)
-6. **Testing Instructions** (how to run tests)
+Keep these: non-obvious build/test commands, architecture decisions against defaults, project-specific gotchas, validation command exact syntax.
 
-### .claude/settings.json Configuration
+### .claude/settings.json
 
-**Location**: `templates/.claude/settings.json.template`  
-**Purpose**: Claude Code permissions and tool settings  
-**Commit**: ✅ Yes (project-specific)  
-
-**Key settings to configure:**
 ```json
 {
   "permissions": {
-    "allowedCommands": [
-      "git",
-      "npm",
-      "python",
-      "pytest",
-      "pip"
+    "allow": [
+      "Bash(git:*)",
+      "Bash(npm:*)",
+      "Bash(pytest:*)"
+    ],
+    "deny": [
+      "Read(node_modules/**)",
+      "Read(dist/**)",
+      "Read(*.lock)"
     ]
-  },
-  "contextManagement": {
-    "autoClear": true,
-    "maxTokens": 25000
   }
 }
 ```
 
-### .mcp.json Server Configuration
+After any suspected supply chain compromise, inspect this file for entries you did not add. The Mini Shai-Hulud worm modifies it as a persistence mechanism.
 
-**Location**: `templates/.mcp.json.template`  
-**Purpose**: External tool and service connections  
-**Commit**: ✅ Yes (with placeholders)  
+### .claude/rules/ layout
 
-**Example configurations:**
+```
+.claude/rules/
+├── global.md           # No paths: — loads every session (keep tiny)
+├── api-rules.md        # paths: src/api/**
+├── db-rules.md         # paths: src/database/**
+└── test-rules.md       # paths: tests/**
+```
+
+Only `global.md` loads unconditionally. The others are free until touched.
+
+### MCP configuration
+
 ```json
 {
-  "servers": {
-    "github": {
-      "enabled": true,
-      "url": "https://api.github.com"
+  "mcpServers": {
+    "headroom": {
+      "command": "headroom",
+      "args": ["mcp", "serve"],
+      "description": "Context compression — reduces all other tool output cost",
+      "enabled": true
     },
-    "database": {
-      "enabled": false,
-      "connection": "postgresql://localhost:5432/mydb"
+    "github": {
+      "enabled": false
     }
   }
 }
 ```
 
+Keep `ENABLE_TOOL_SEARCH=true` in your Claude Code settings when running multiple servers.
+
 ---
 
-## 🔧 Monthly Maintenance Checklist
-
-Set a recurring reminder to run these checks:
+## 🔧 Monthly Maintenance
 
 ```bash
-# 1. Run health check (Linux/Mac)
+# 1. Health check
 bash scripts/check_config_health.sh
 
-# 1. Run health check (Windows)
-powershell scripts/powershell/check_config_health.ps1
+# 2. Token audit
+python -c "
+with open('CLAUDE.md') as f:
+    words = len(f.read().split())
+print(f'CLAUDE.md: {words} words ≈ {int(words*1.3)} tokens')
+"
 
-# 2. Review and trim CLAUDE.md if needed
-wc -l CLAUDE.md  # Target: <50 lines
+# 3. MCP audit
+cat .mcp.json | python -c "
+import json, sys
+cfg = json.load(sys.stdin)
+servers = cfg.get('mcpServers', {})
+enabled = [k for k,v in servers.items() if v.get('enabled', False)]
+print(f'Enabled MCP servers ({len(enabled)}): {enabled}')
+"
 
-# 3. Audit MCP servers
-cat .mcp.json | grep "enabled.*true"
+# 4. Security: check .claude/settings.json for unexpected entries
+python -c "
+import json
+with open('.claude/settings.json') as f:
+    cfg = json.load(f)
+print(json.dumps(cfg, indent=2))
+print('--- Review above for unexpected entries ---')
+"
 
-# 4. Review custom commands
-ls .claude/commands/  # Remove unused commands
-
-# 5. Update playbook (if new version available)
+# 5. Update playbook
 git pull origin main
 ```
-
-**Time investment**: 10 minutes/month  
-**ROI**: Prevents hours of debugging configuration issues
 
 ---
 
 ## 🚨 Common Configuration Mistakes
 
-### 1. Overly Detailed CLAUDE.md
-**Problem**: 100+ lines with project history  
-**Solution**: Focus on commands, paths, gotchas - keep it under 50 lines
+**Overly detailed CLAUDE.md (most common)**
+Problem: 100+ lines or 1000+ tokens of project history and generic advice.
+Fix: Strip to commands, constraints, and genuine gotchas. Under 500 tokens.
 
-### 2. Too Many MCP Servers
-**Problem**: Enabling all available servers  
-**Solution**: Only enable servers you use >50% of the time
+**Using .claudeignore instead of permissions.deny for enforcement**
+Problem: Ignored files still get read when Claude judges them necessary.
+Fix: Add `permissions.deny` for paths that must never enter context.
 
-### 3. Manual Permission Approvals
-**Problem**: Approving commands manually every session  
-**Solution**: Use allowlists in `.claude/settings.json`
+**Never auditing MCP configs for credential leakage**
+Problem: API keys accumulate in `~/.vscode/mcp.json`, `~/.cursor/mcp.json`, `.mcp.json`.
+Fix: Use environment variable references, not plaintext keys. Rotate after any supply chain incident.
 
-### 4. Never Resetting Context
-**Problem**: Context grows too large, performance degrades  
-**Solution**: Reset every 5-7 prompts with `/clear` + `catchup`
+**Connecting MCP servers mid-session**
+Problem: Wipes your entire prompt cache.
+Fix: All MCP changes at session boundaries.
 
-### 5. Ignoring Health Checks
-**Problem**: Configuration drift and inefficiency  
-**Solution**: Run monthly health checks
-
----
-
-## 🎯 Configuration Examples by Project Type
-
-### Python Web Application
-```markdown
-# MyWebApp Configuration
-
-**Tech Stack**: Python 3.9, Django 4.0, PostgreSQL 13
-**Main Commands**:
-- `python manage.py runserver` - Start dev server
-- `python manage.py test` - Run tests
-- `python manage.py migrate` - Apply DB migrations
-
-**Key Paths**:
-- `/src/` - Main application code
-- `/tests/` - Test files
-- `/config/` - Configuration files
-
-**Gotchas**:
-- Always run migrations after pulling
-- Use `DEBUG=True` for local development
-- Database resets require superuser recreation
-```
-
-### JavaScript Frontend
-```markdown
-# MyFrontend Configuration
-
-**Tech Stack**: React 18, TypeScript, Vite
-**Main Commands**:
-- `npm run dev` - Start development server
-- `npm run test` - Run tests
-- `npm run build` - Build for production
-
-**Key Paths**:
-- `/src/` - Source code
-- `/tests/` - Test files
-- `/public/` - Static assets
-
-**Gotchas**:
-- Node version must be 16+ for Vite
-- Run `npm install` after pulling changes
-- Build output goes to `/dist/`
-```
+**Skipping path-scoped rules**
+Problem: All rules load every session regardless of what you're working on.
+Fix: Move domain-specific rules to `.claude/rules/` with `paths:` frontmatter.
 
 ---
 
 ## 📚 Related Documentation
 
-- **[Getting Started](GETTING_STARTED.md)** - Complete setup guide
-- **[Token Economics](TOKEN_ECONOMICS.md)** - Optimize token usage
-- **[Shell Aliases](ALIASES.md)** - Productivity shortcuts
-- **[Success Guide](SUCCESS_GUIDE.md)** - Best practices and metrics
-
----
-
-## 📂 Project Structure
-
-Understanding the playbook structure helps with configuration:
-
-```
-claude-code-playbook/
-├── 📁 docs/                    # Complete documentation
-│   ├── GETTING_STARTED.md     # 15-minute setup guide
-│   ├── CONFIGURATION.md       # Best practices
-│   ├── ALIASES.md            # Productivity shortcuts
-│   ├── TOKEN_ECONOMICS.md    # Token optimization
-│   ├── SUCCESS_GUIDE.md      # Success metrics & learning
-│   └── windows/              # Windows-specific guides
-├── 📁 scripts/               # Health check and utility scripts
-│   ├── check_config_health.sh    # Linux/Mac health check
-│   ├── validate_config.py        # Configuration validator
-│   └── powershell/           # Windows PowerShell scripts
-├── 📁 skills/                # Available skills and workflows
-│   ├── python-scientific/    # Scientific computing patterns
-│   └── refactoring/          # 7 refactoring workflows
-├── 📁 templates/             # Ready-to-use configuration files
-│   ├── CLAUDE.md.template    # Main project configuration
-│   ├── .cursorrules.template # IDE integration rules
-│   ├── .claude/              # Claude-specific settings
-│   └── [5 more templates]    # Complete template set
-└── 📄 README.md              # Main documentation entry point
-```
-
-**Templates include:** CLAUDE.md, .cursorrules, settings, MCP configs, aliases, and more.
-
-## 🔄 Monthly Maintenance
-
-Set a recurring reminder to:
-
-```bash
-# 1. Run health check
-bash scripts/check_config_health.sh
-
-# 2. Review and trim CLAUDE.md if needed
-wc -l CLAUDE.md  # Target: <50 lines
-
-# 3. Audit MCP servers
-cat .mcp.json | grep "enabled.*true"
-
-# 4. Review custom commands
-ls .claude/commands/  # Remove unused commands
-
-# 5. Update playbook (if new version available)
-git pull origin main
-```
-
-**Next Guide**: [Token Economics](TOKEN_ECONOMICS.md) →
+- [Getting Started](GETTING_STARTED.md) — setup guide
+- [Token Economics](TOKEN_ECONOMICS.md) — three-layer optimization model
+- [Agentic Patterns](AGENTIC_PATTERNS.md) — compression, hooks, memory
+- [Shell Aliases](ALIASES.md) — productivity shortcuts

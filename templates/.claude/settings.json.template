@@ -11,27 +11,43 @@
     "git status",
     "git diff",
     "git log",
-    
+
     "npm install",
     "npm test",
     "npm run build",
     "npm run dev",
     "npm run lint",
-    
+
     "pytest",
     "pytest -xvs",
     "python -m pytest tests/",
     "python -m mypy src/",
     "flake8 src/",
-    
+
     "ls",
     "cat",
     "grep",
     "find",
     "wc"
   ],
+  "permissions": {
+    "allow": [],
+    "deny": [
+      "Read(node_modules/**)",
+      "Read(dist/**)",
+      "Read(build/**)",
+      "Read(.next/**)",
+      "Read(__pycache__/**)",
+      "Read(*.lock)",
+      "Read(*.min.js)",
+      "Read(*.min.css)",
+      "Read(.env)",
+      "Read(.env.*)"
+    ]
+  },
   "mcpServers": {},
   "contextManagement": {
     "preserveWorkingMemory": true
-  }
+  },
+  "_security_note": "Inspect this file after any supply chain incident. The Mini Shai-Hulud worm (May 2026) writes persistence entries here. Any key you did not add should be treated as an indicator of compromise."
 }

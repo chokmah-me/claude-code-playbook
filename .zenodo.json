@@ -1,0 +1,47 @@
+{
+  "title": "Claude Code Playbook v4.4.0",
+  "description": "A token-efficient AI engineering system for Claude Code providing structured workflows, agentic patterns, three-layer context optimization (don't-load, compress, cache), path-scoped rules, output compression via Headroom, and supply-chain security hardening for software development teams. This release (v4.4.0) adds: session startup token floor documentation, three-layer token optimization model, Headroom integration (47–92% dynamic context reduction), path-scoped .claude/rules/ pattern (41% rule overhead reduction), Mini Shai-Hulud supply chain worm security hardening, and a .claudeignore template.",
+  "creators": [
+    {
+      "name": "Bilar, Daniyel Yaacov",
+      "affiliation": "Chokmah LLC / Collaborative Dynamics, Inc.",
+      "orcid": "0000-0002-9040-6914"
+    }
+  ],
+  "keywords": [
+    "claude-code",
+    "ai-development",
+    "refactoring",
+    "token-optimization",
+    "context-engineering",
+    "supply-chain-security",
+    "workflow-automation",
+    "developer-tools",
+    "agentic-patterns",
+    "output-compression",
+    "headroom",
+    "llm-tooling"
+  ],
+  "license": "MIT",
+  "version": "4.4.0",
+  "upload_type": "software",
+  "access_right": "open",
+  "related_identifiers": [
+    {
+      "identifier": "https://github.com/chopratejas/headroom",
+      "relation": "references",
+      "scheme": "url"
+    },
+    {
+      "identifier": "https://boringbot.substack.com/p/how-to-save-millions-in-claude-tokens",
+      "relation": "references",
+      "scheme": "url"
+    }
+  ],
+  "references": [
+    "Chopra, T. (2026). Headroom: Compress tool outputs, logs, files, and RAG chunks before they reach the LLM. GitHub. https://github.com/chopratejas/headroom",
+    "Farooq, H. (2026). How to save millions in Claude tokens. The Production Gap (Substack). https://boringbot.substack.com/p/how-to-save-millions-in-claude-tokens",
+    "Aikido Security (2026). Mini Shai-Hulud is back: npm Worm hits over 160 packages. https://www.aikido.dev/blog/mini-shai-hulud-is-back-tanstack-compromised",
+    "Aikido Security (2026). Microsoft's durabletask package on PyPI Compromised. https://www.aikido.dev/blog/durabletask-package-compromised-mini-shai-hulud"
+  ]
+}

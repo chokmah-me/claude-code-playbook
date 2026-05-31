@@ -8,18 +8,25 @@
 
 **Model & Environment:**
 - Use the default Claude model set in Claude Code (typically the latest available)
-- Work is designed for high-context Claude models (4.x series and above)
+- Designed for high-context Claude models (4.x series and above)
 
-**Token Efficiency:**
-- Monitor token usage via Claude Code UI (auto-visible in current version)
-- For multi-session refactorings, maintain `REFACTOR_PROGRESS.md` for persistent state
-- Use Plan Mode (`/plan` skill) for planning phase before implementation
-- Use memory files and task lists for session continuity (no manual `/clear` workaround needed)
+**CLAUDE.md token budget:**
+- This file loads into every request. Target: under 500 tokens (~385 words).
+- Use HTML comments (`<!-- note -->`) for teammate notes — they cost zero tokens.
+- `@path/to/file` imports do NOT save tokens; all imported files load at session start.
+- Run `/context` to see live breakdown; `/memory` to see what loaded at startup.
+- If you run `headroom learn`, it may auto-append corrections here. Review before committing.
 
-**Practical Guidelines:**
-- Batch modifications into 10-15 file increments per session
+**Token efficiency:**
+- Maintain `REFACTOR_PROGRESS.md` for multi-session state
+- Use Plan Mode (`/plan`) for planning before implementation
+- Use `.claude/rules/` with `paths:` frontmatter for domain-specific rules (zero cost until triggered)
+- Run `headroom wrap claude` to compress tool output during sessions (see [TOKEN_ECONOMICS.md](docs/TOKEN_ECONOMICS.md))
+
+**Practical guidelines:**
+- Batch modifications into 10–15 file increments per session
 - Use Explore subagents for codebase analysis (faster than manual grep)
-- Commit atomically after meaningful milestones (every 2-4 files)
+- Commit atomically after meaningful milestones (every 2–4 files)
 
 ---
 
@@ -27,23 +34,14 @@
 
 **Target State:** Modern modular architecture with feature-based organization
 
-**Current State → Future State:**
-
 | Current | Target |
 |---------|--------|
 | Monolithic files | Feature modules under `/src/features/` |
 | Class inheritance | Functional composition with factory functions |
 | Throw/catch error handling | Result<T,E> monads or equivalent |
 | Hardcoded business logic | Configuration-driven logic |
-| Mixed concerns (god objects) | Manager/Endpoint/Database layers |
-| Flat file structure | Domain-organized features |
-
-**Key Modern Patterns:**
-1. **Feature-based modules:** `src/features/{domain}/{manager,endpoint,database,types}.ts`
-2. **Result types:** All fallible operations return Result<T, Error> or equivalent
-3. **Functional composition:** Factory functions instead of classes
-4. **Dependency injection:** Pass dependencies as parameters
-5. **Configuration-driven:** Extract rules to config objects
+| Mixed concerns | Manager/Endpoint/Database layers |
+| All rules in CLAUDE.md | Domain rules in `.claude/rules/` with `paths:` |
 
 ---
 
@@ -51,198 +49,99 @@
 
 **Before ANY commit, ALL checks must pass:**
 
-### TypeScript/JavaScript Project
+### TypeScript/JavaScript
 ```bash
-npm run type-check    # Type checking: 0 errors
-npm run test:unit     # Unit tests: all passing
-npm run lint          # Linting: 0 errors, 0 warnings
+npm run type-check    # 0 errors
+npm run test:unit     # all passing
+npm run lint          # 0 errors, 0 warnings
 ```
 
-### Python Project
+### Python
 ```bash
-mypy src/ --strict    # Type checking: 0 errors
-pytest tests/ -v      # Unit tests: all passing
-flake8 src/           # Linting: 0 errors
+mypy src/ --strict    # 0 errors
+pytest tests/ -v      # all passing
+flake8 src/           # 0 errors
 ```
 
-**If ANY validation fails: DO NOT PROCEED. Fix the issue first.**
+**If ANY validation fails: stop. Fix it first.**
+
+---
+
+## ⚠️ SECURITY: .claude/ files are a target
+
+The Mini Shai-Hulud supply chain worm (May 2026) writes persistence to `.claude/settings.json`
+and exfiltrates credentials from `~/.config/claude/claude_desktop_config.json`.
+
+After any supply chain incident (unexpected package behavior, CI anomalies):
+- Inspect `.claude/settings.json` for unexpected entries
+- Rotate any API keys stored in MCP config files
+- Do not store long-lived tokens in plaintext MCP configs
 
 ---
 
 ## API SURFACE PROTECTION
 
-**Before modifying any exported function, class, or module:**
+Before modifying any exported function, class, or module, search all usages:
 
-1. Search for all usages:
-   ```bash
-   # TypeScript/JavaScript
-   grep -r "functionName" src/
+```bash
+grep -r "functionName" src/
+```
 
-   # Python
-   grep -r "function_name" src/
-   ```
-
-2. Analyze impact of changes
-
-3. Propose migration plan if breaking changes needed
-
-4. Get explicit user approval before modifying
-
-**Backwards compatibility is critical. When in doubt, ask.**
+Get explicit user approval before breaking changes. Backwards compatibility is critical.
 
 ---
 
 ## COMMIT GUIDELINES
 
-**Commit Frequency:**
-- Commit after every 2-4 files modified
-- Don't accumulate large changesets
-- Atomic commits: one logical change per commit
-
-**Commit Message Format:**
+Format:
 ```
 refactor: {brief description}
-
-{detailed description of changes}
 
 Changes:
 - {specific change 1}
 - {specific change 2}
-- {specific change 3}
 
-Tests: {passing/fixed}
-Types: {passing}
-Lint: {clean}
-
-{context about why this change was made}
+Tests: passing | Types: clean | Lint: clean
 ```
+
+Commit after every 2–4 files. Atomic commits only.
 
 ---
 
 ## PROGRESS TRACKING
 
-**For multi-session refactorings, maintain `REFACTOR_PROGRESS.md`:**
+Maintain `REFACTOR_PROGRESS.md`:
 
 ```markdown
-# Refactoring Progress
-
 ## Current Goal
-Decompose monolithic module
-
-## Session Info
-- Started: 2026-04-01
-- Files to modify: [list]
+[objective]
 
 ## Completed
-- [x] Extracted validateUserInput (lines 145-230)
-  - Created src/features/user/validate.ts
-  - Added 10 tests, all passing
-- [x] Extracted formatMessage (lines 350-420)
+- [x] Extracted validateUserInput → user/validate.ts (10 tests passing)
 
 ## In Progress
-- [ ] Extract command parsing logic
+- [ ] Extract formatMessage
 
 ## Pending
-- [ ] Extract event handlers
-- [ ] Modernize error handling
-- [ ] Move to src/features/
+- [ ] Extract error handlers
 
 ## Blockers
-None currently
-
-## Notes
-- Main module: 1200 LOC → 950 LOC (target: <500)
-- All validations passing
+None
 ```
-
----
-
-## SESSION CONTINUITY PROTOCOL
-
-**Between sessions (after stopping work):**
-1. Update `REFACTOR_PROGRESS.md` with:
-   - Completed tasks and files modified
-   - Current goal and blockers
-   - Next steps
-2. Commit your work with descriptive commit messages
-3. On next session, read `REFACTOR_PROGRESS.md` before resuming
-4. Run `claude skills refactoring catchup` to restore context from progress file
-
-**In-session token management:**
-- Claude Code UI displays token usage continuously
-- No need for manual `/cost` checks or `/clear` resets
-- Memory system and task lists provide persistent context across turns
-
----
-
-## ERROR HANDLING STRATEGY
-
-**When type-checking fails:**
-
-1. **STOP immediately** - Do not proceed with other work
-2. Read the error message carefully
-3. Understand the root cause
-4. Fix the error
-5. Re-run type-check
-6. Only proceed once type-check passes
-
-**When tests fail:**
-
-1. **STOP immediately**
-2. Read test failure output
-3. Determine if issue is:
-   - Test needs updating (behavior intentionally changed)
-   - Implementation is broken (unintentional behavior change)
-4. Fix appropriately
-5. Re-run tests
-6. Only proceed once all tests pass
-
-**When you're unsure:**
-- Ask the user for guidance
-- Don't guess or make assumptions
-- Better to ask than to break things
 
 ---
 
 ## REFACTORING WORKFLOWS
 
-Use the refactoring skills system for all work:
+1. **Assess** — `claude skills refactoring triage`
+2. **Plan** — Plan Mode or `claude skills refactoring qplan`
+3. **Implement** — `claude skills refactoring qcode` / `extract` / `modernize`
+4. **Resume** — `claude skills refactoring catchup` (reads REFACTOR_PROGRESS.md)
 
-**Typical Workflow:**
-1. **Assess** — `claude skills refactoring triage` to find refactoring opportunities
-2. **Plan** — Use Plan Mode or `claude skills refactoring qplan` to design the approach
-3. **Implement** — `claude skills refactoring qcode` for batch implementation, or `extract`/`modernize` for focused changes
-4. **Resume** — `claude skills refactoring catchup` when resuming after a break (reads REFACTOR_PROGRESS.md)
-
-**For New Sessions:**
-- Read `REFACTOR_PROGRESS.md` if it exists (shows prior work context)
-- Run `claude skills refactoring triage` to assess current state
-- Use Plan Mode for planning phase
-
-**See:** [.claude/skills/refactoring/SKILL.md](.claude/skills/refactoring/SKILL.md) for complete workflow documentation.
+See `.claude/skills/refactoring/SKILL.md` for complete workflow documentation.
 
 ---
 
-## MINIMUM VIABLE REFACTOR
-
-**Immediate Goal:** Keep application operational while refactoring
-
-**Non-Negotiable:**
-- Application must start without errors
-- All features must continue working
-- No user-facing behavior changes (unless explicitly requested)
-
----
-
-## USEFUL REFERENCES
-
-**In This Project:**
-- [.claude/skills/refactoring/SKILL.md](.claude/skills/refactoring/SKILL.md) - Workflow documentation
-- [.claude/skills/refactoring/knowledge/typescript-style.md](.claude/skills/refactoring/knowledge/typescript-style.md) - TypeScript patterns (if applicable)
-- [.claude/skills/refactoring/knowledge/architecture-patterns.md](.claude/skills/refactoring/knowledge/architecture-patterns.md) - Modern architecture patterns
-
----
-
-**Last Updated:** 2026-04-01
-**Version:** 4.2.0
-**License:** MIT
+**Last Updated**: May 2026
+**Version**: 4.4.0
+**License**: MIT
