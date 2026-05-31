@@ -1,5 +1,46 @@
 # Documentation Discrepancy Audit Report
 
+> **Latest audit: v4.4.1 (2026-05-31) — see section below.**
+> The original v4.2.0 report is retained underneath it for history.
+
+---
+
+## v4.4.1 Verification — 2026-05-31
+
+**Target**: claude-code-playbook v4.4.1 (verifies v4.4.0 capability claims + v4.4.1 consistency fixes)
+**Auditor**: manual claim-vs-implementation check
+**Result**: ✅ **PASSED** — capability claims verified; consistency drift fixed in this pass
+
+### Verified claims
+
+| Claim | Evidence | Status |
+|-------|----------|--------|
+| "7 skills, 17 workflows" | `.claude/skills/` = 7 skill dirs; 17 `workflows/*.md` | ✅ Verified |
+| Three-layer token optimization | `docs/TOKEN_ECONOMICS.md`; `docs/AGENTIC_PATTERNS.md` patterns 8 & 9 | ✅ Verified |
+| Path-scoped rules | `templates/.claude/rules/{global,api}.md` with `paths:` frontmatter | ✅ Verified |
+| Security hardening | `scripts/check_config_health.sh` (9 sections); `_security_note` in settings template | ✅ Verified |
+| Cross-platform | `scripts/powershell/` aliases + 2 health-check variants | ✅ Verified |
+| Templates ship as documented | `.claudeignore`, `.bash_aliases.template`, `settings.json.template`, `.claude/rules/` present | ✅ Verified |
+| Test suite green | `pytest` → **47 passed** | ✅ Verified |
+
+### Discrepancies found and fixed in this pass
+
+| Issue | Resolution |
+|-------|------------|
+| Root `CLAUDE.md` declared v4.2.0 / 2026-04-01 (repo is v4.4.0) | Version/date bumped to 4.4.0 / 2026-05-31 |
+| Root `CLAUDE.md` TypeScript content vs Python repo | Added labeled note clarifying it is an *example* constitution |
+| README Quick Start `cp … >> ~/.bashrc` (invalid) | Changed to `cat … >> ~/.bashrc` |
+| This audit report stale at v4.2.0 | This v4.4.0 section added |
+
+### Known minor item (not blocking)
+- Two settings templates exist (`templates/settings.json.template` and `templates/.claude/settings.json.template`). Both are valid; canonicalizing to one is a future cleanup.
+
+**Verification commands**: `pytest -q` → `47 passed`; `bash scripts/check_config_health.sh` → 9 sections pass.
+
+---
+
+## v4.2.0 Verification — 2026-04-01 (historical)
+
 **Date**: 2026-04-01
 **Target**: claude-code-playbook v4.2.0
 **Auditor**: documentation-discrepancy-detector (manual)

@@ -1,0 +1,26 @@
+{
+  "allowedTools": ["Edit", "Write", "Bash"],
+  "allowedCommands": [
+    "git status", "git diff", "git log",
+    "npm test", "npm run lint", "npm run build",
+    "pytest", "ls", "cat", "grep"
+  ],
+  "permissions": {
+    "allow": [],
+    "deny": [
+      "Read(node_modules/**)",
+      "Read(dist/**)",
+      "Read(build/**)",
+      "Read(.env)",
+      "Read(.env.*)",
+      "Read(*.lock)",
+      "Read(__pycache__/**)",
+      "Read(*.min.js)",
+      "Read(*.min.css)",
+      "Read(.next/**)"
+    ]
+  },
+  "mcpServers": {},
+  "contextManagement": {"preserveWorkingMemory": true},
+  "_security_note": "Inspect after supply chain incident. Mini Shai-Hulud worm (May 2026) writes persistence entries here."
+}

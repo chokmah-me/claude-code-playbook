@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [4.4.1] - 2026-05-31
+
+### Fixed
+
+- **Root `CLAUDE.md`** — version/date stamp corrected from 4.2.0 / 2026-04-01 to 4.4.1 / 2026-05-31 (had drifted two releases behind the repo); added a labeled note clarifying the file is an *example* TypeScript refactoring constitution while this repo itself is Python/markdown.
+- **`README.md`** — Quick Start used `cp templates/.bash_aliases.template >> ~/.bashrc`, which is invalid (`cp` cannot write to a redirect); changed to `cat`.
+- **`AUDIT_REPORT.md`** — refreshed with a dated v4.4.1 verification section (7 skills / 17 workflows, three-layer optimization, path-scoped rules, security hardening, `pytest` 47 passed); the original v4.2.0 report is retained for history.
+
+### Added
+
+- **Test suite committed** — `pytest.ini` + `tests/` (47 passing) now tracked in git, covering token optimization, path-scoped rules, security hardening, and Headroom integration.
+
+---
+
 ## [4.4.0] - 2026-05-31
 
 ### Added

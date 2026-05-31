@@ -1,0 +1,38 @@
+# .claudeignore — advisory signal layer
+
+# Dependencies
+node_modules/
+vendor/
+.venv/
+venv/
+
+# Build outputs
+dist/
+build/
+out/
+.next/
+__pycache__/
+*.pyc
+
+# Lock files
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+poetry.lock
+
+# Generated
+*.min.js
+*.min.css
+*.bundle.js
+
+# Test coverage
+coverage/
+.coverage
+htmlcov/
+.pytest_cache/
+
+# Secrets
+.env
+.env.*
+*.pem
+*.key

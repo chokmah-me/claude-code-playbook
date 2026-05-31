@@ -1,6 +1,6 @@
 # 🤖 Claude Code Playbook
 
-**Version**: 4.4.0 | **Date**: May 31, 2026 | **License**: MIT | **Repository**: https://github.com/chokmah-me/claude-code-playbook
+**Version**: 4.4.1 | **Date**: May 31, 2026 | **License**: MIT | **Repository**: https://github.com/chokmah-me/claude-code-playbook
 
 A token-efficient AI engineering system that reduces conversation turns through specialized workflows, agentic patterns, and three-layer context optimization.
 
@@ -20,7 +20,7 @@ cd claude-code-playbook
 # 2. Copy templates to your project
 cp templates/CLAUDE.md.template /path/to/your/project/CLAUDE.md
 cp templates/.claudeignore /path/to/your/project/.claudeignore
-cp templates/.bash_aliases.template >> ~/.bashrc && source ~/.bashrc
+cat templates/.bash_aliases.template >> ~/.bashrc && source ~/.bashrc
 
 # 3. Optional — output compression (recommended for long sessions)
 pip install "headroom-ai[all]"
