@@ -190,6 +190,29 @@ Run the create workflow to design a skill from scratch:
 - When an existing skill needs improvement
 - Building a skill library from real usage patterns
 
+### 8. Fable 5
+
+**Location**: `.claude/skills/fable-5/SKILL.md`
+
+**Purpose**: Maximize Claude Fable 5 with its best published targeted prompts, official scaffolding, memory systems, and harness integration.
+
+**Available Workflows**:
+- **prepare-session**: Prepare intent, scaffolding, effort, and memory for a Fable 5 run
+- **run-targeted-prompts**: Execute the highest-leverage Fable 5-specific prompts (Anthropic official, Every library, Ken Huang, community meta)
+- **setup-memory**: Create and maintain a persistent lesson-based memory system optimized for Fable 5
+
+**When to Use**:
+- You have Fable 5 access and want to use the most effective prompts/scaffolding for it
+- Running ambitious, long-horizon, or meta work (harness audits, complex one-shots)
+- Setting up memory so Fable 5 compounds knowledge across sessions
+
+**Quick Start**:
+```
+fable-5 prepare-session   # before important Fable work
+fable-5 run-targeted-prompts   # to apply the actual best prompts
+fable-5 setup-memory   # after runs to capture lessons
+```
+
 ## Skill Selection Guide
 
 | Task Type | Primary Skill | Notes |
@@ -211,6 +234,8 @@ Run the create workflow to design a skill from scratch:
 | Validate skill quality | Skill Creator | Use audit workflow |
 | Formalize repeated workflow | Skill Extractor | Use extract workflow |
 | Improve a skill | Skill Extractor | Use refine workflow |
+| Use Fable 5 at max leverage | Fable 5 | prepare-session + run-targeted-prompts |
+| Set up memory for Fable 5 | Fable 5 | setup-memory |
 
 ## Usage Patterns
 
