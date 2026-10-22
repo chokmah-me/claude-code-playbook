@@ -1,28 +1,28 @@
 # AGENTS.md — claude-code-playbook
 
-## What this is
-Token-efficient Claude Code workflows: agentic patterns, three-layer context control, path-scoped rules, Headroom compression, and supply-chain hardening.
+Token-efficient Claude Code playbook: templates, aliases, path-scoped rules, Headroom wrap. Copy templates into a target project. This repo is the kit.
 
-Full agent guidance for this repo lives in `CLAUDE.md`; this file is the cross-tool summary. Read `CLAUDE.md` before substantive work.
+## Commands
 
-## Layout (top level)
-- `AUDIT_REPORT.md`
-- `CHANGELOG.md`
-- `CITATION.cff`
-- `CLAUDE.md`
-- `CONTRIBUTING.md`
-- `GITHUB_SETUP.md`
-- `LICENSE`
-- `MIGRATION.md`
-- `README.md`
-- `RELEASE_NOTES_v4.4.0.md`
+```powershell
+Copy-Item templates\CLAUDE.md.template <project>\CLAUDE.md
+Copy-Item templates\.claudeignore <project>\.claudeignore
+. .\scripts\powershell\setup_powershell_profile.ps1
+pip install "headroom-ai[all]"
+pytest tests/ -q
+```
+
+Daily aliases after profile setup: `cctriage`, `ccplan`, `cccode`, `cchealth`.
 
 ## Work rules
-- Work from the README first; it is the canonical description of purpose, layout, and any build or verify commands.
-- Do not change verdicts, locked data tables, or published artifacts without the user's explicit word.
-- Keep changes small and receipt-backed: name the commit or artifact a claim rests on.
 
-## Canonical docs
-- `README.md` — purpose, usage, and status.
-- `CITATION.cff` — how to cite the associated paper/record.
-- `LICENSE` — terms of use.
+- Keep a target project's `CLAUDE.md` small. `/context` should show it under ~500 tokens.
+- Do not flatten path-scoped rules from `templates/.claude/rules/` into the root file.
+- Tests here check playbook docs/scripts, not a user's downstream repo.
+
+## Pointers
+
+- `README.md` — 15-minute setup
+- `docs/GETTING_STARTED.md`
+- `templates/` — files to copy
+- `CLAUDE.md` — Claude-only depth for this kit
